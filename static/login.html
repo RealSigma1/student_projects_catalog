@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>🎓 Вход</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background: url('https://flatonika.ru/wp-content/uploads/2014/09/Krasivie-foni-dlya-sayta-Background-01-e1409774556464.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: -1;
+        }
+        .auth-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin: 0 auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        h1 {
+            font-size: 2em;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        p {
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h1>🎓 Вход</h1>
+        <input type="text" id="loginUsername" placeholder="Имя пользователя" required><br>
+        <input type="password" id="loginPassword" placeholder="Пароль" required><br>
+        <button onclick="loginUser()">Войти</button>
+        <p>Нет аккаунта? <a href="/register">Зарегистрируйтесь</a>.</p>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+
+        async function loginUser() {
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+
+            if (!username || !password) {
+                alert("Заполните все поля!");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    alert("Вход выполнен успешно!");
+                    window.location.href = "/";
+                } else {
+                    const errorData = await response.json();
+                    alert(`Ошибка входа: ${errorData.detail || "Неизвестная ошибка"}`);
+                }
+            } catch (error) {
+                console.error("Ошибка при отправке запроса:", error);
+                alert("Произошла ошибка при входе. Проверьте консоль.");
+            }
+        }
+    </script>
+</body>
+</html>
