@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: student-projects-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_DATA_DIR: /app/runtime
+      DATABASE_PATH: /app/runtime/projects.db
+      MEDIA_DIR: /app/runtime/media
+      COOKIE_SECURE: "false"
+    volumes:
+      - ./runtime:/app/runtime
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: student-projects-nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+

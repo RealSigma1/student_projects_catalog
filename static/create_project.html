@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать проект</title>
+    <link rel="stylesheet" href="/static/theme.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="topbar-row">
+        <div class="brand-lockup">
+            <div class="brand-mark">SP</div>
+            <div class="brand-copy">
+                <strong>Create Project</strong>
+                <span>Публикация новой карточки проекта для каталога</span>
+            </div>
+        </div>
+        <div class="topbar-actions">
+            <a class="button-link" href="/">Каталог</a>
+            <div id="notificationsHost"></div>
+            <a class="button-link" id="profileLink" href="/profile/me">Профиль</a>
+        </div>
+    </div>
+</header>
+
+<main class="app-shell">
+    <section class="hero fade-up">
+        <div class="hero-card">
+            <div class="eyebrow">Publish Project</div>
+            <h1 class="hero-title">Оформи проект как сильную публичную карточку для поиска команды.</h1>
+            <p class="hero-text">
+                Коротко и ясно опиши идею, стадию проекта, роли, стек и контакты.
+                После публикации карточка сразу появится в каталоге и станет доступна для откликов.
+            </p>
+        </div>
+    </section>
+
+    <section class="catalog-shell">
+        <section class="section-card fade-up">
+            <div class="section-title-row">
+                <div>
+                    <h2>Новый проект</h2>
+                    <p class="section-subtitle">Заполни карточку проекта. Поля про GitHub и demo можно оставить пустыми.</p>
+                </div>
+            </div>
+
+            <form id="projectForm" class="project-form-grid">
+                <div class="field field-span-2">
+                    <label for="title">Название проекта</label>
+                    <input class="control" id="title" type="text" required placeholder="HSE Study Buddy">
+                </div>
+                <div class="field field-span-2">
+                    <label for="description">Описание</label>
+                    <textarea class="control-area" id="description" required placeholder="Что это за проект, на какой он стадии и кто нужен в команду?"></textarea>
+                </div>
+                <div class="field">
+                    <label for="tags">Теги</label>
+                    <input class="control" id="tags" type="text" placeholder="fastapi, ai, hackathon">
+                </div>
+                <div class="field">
+                    <label for="roles">Требуемые роли</label>
+                    <input class="control" id="roles" type="text" placeholder="backend, frontend, design">
+                </div>
+                <div class="field">
+                    <label for="githubUrl">GitHub</label>
+                    <input class="control" id="githubUrl" type="text" placeholder="https://github.com/...">
+                </div>
+                <div class="field">
+                    <label for="demoUrl">Demo</label>
+                    <input class="control" id="demoUrl" type="text" placeholder="https://...">
+                </div>
+                <div class="field field-span-2">
+                    <label for="contactInfo">Контакты</label>
+                    <textarea class="control-area" id="contactInfo" placeholder="Telegram, email, Discord или инструкция по отклику."></textarea>
+                </div>
+
+                <div class="button-row field-span-2">
+                    <button class="button button-primary" type="submit">Опубликовать проект</button>
+                    <a class="button-link" href="/">Вернуться в каталог</a>
+                </div>
+                <div class="message field-span-2" id="formMessage"></div>
+            </form>
+        </section>
+    </section>
+</main>
+
+<script src="/static/notifications.js"></script>
+<script>
+    const API = window.location.origin;
+
+    function csv(value) {
+        return value.split(",").map(item => item.trim()).filter(Boolean);
+    }
+
+    async function loadCurrentUser() {
+        const response = await fetch(`${API}/api/me`);
+        if (!response.ok) {
+            window.location.href = "/login";
+            return;
+        }
+        const user = await response.json();
+        document.getElementById("profileLink").textContent = user.full_name || user.username;
+    }
+
+    async function createProject(event) {
+        event.preventDefault();
+        const message = document.getElementById("formMessage");
+        message.textContent = "";
+        message.className = "message field-span-2";
+
+        const payload = {
+            title: document.getElementById("title").value.trim(),
+            description: document.getElementById("description").value.trim(),
+            tags: csv(document.getElementById("tags").value),
+            required_roles: csv(document.getElementById("roles").value),
+            github_url: document.getElementById("githubUrl").value.trim(),
+            demo_url: document.getElementById("demoUrl").value.trim(),
+            contact_info: document.getElementById("contactInfo").value.trim(),
+            status: "active"
+        };
+
+        try {
+            const response = await fetch(`${API}/api/projects`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                message.textContent = data.detail || "Не удалось создать проект.";
+                message.classList.add("message-error");
+                return;
+            }
+
+            message.textContent = "Проект опубликован. Переходим к карточке проекта...";
+            message.classList.add("message-success");
+            window.setTimeout(() => {
+                window.location.href = `/project/${data.project.id}`;
+            }, 500);
+        } catch (error) {
+            message.textContent = "Сетевая ошибка.";
+            message.classList.add("message-error");
+        }
+    }
+
+    document.getElementById("projectForm").addEventListener("submit", createProject);
+
+    window.addEventListener("load", async () => {
+        if (window.initNotifications) {
+            window.initNotifications({ hostId: "notificationsHost" });
+        }
+        await loadCurrentUser();
+    });
+</script>
+</body>
+</html>

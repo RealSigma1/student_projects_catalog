@@ -2,127 +2,74 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>🎓 Вход</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            background: url('https://flatonika.ru/wp-content/uploads/2014/09/Krasivie-foni-dlya-sayta-Background-01-e1409774556464.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            z-index: -1;
-        }
-        .auth-container {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            margin: 0 auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        h1 {
-            font-size: 2em;
-            color: #4a4a4a;
-            margin-bottom: 20px;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s ease;
-        }
-        input:focus {
-            border-color: #007BFF;
-            outline: none;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            background: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        p {
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-        a {
-            color: #007BFF;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="/static/theme.css">
 </head>
 <body>
-    <div class="auth-container">
-        <h1>🎓 Вход</h1>
-        <input type="text" id="loginUsername" placeholder="Имя пользователя" required><br>
-        <input type="password" id="loginPassword" placeholder="Пароль" required><br>
-        <button onclick="loginUser()">Войти</button>
-        <p>Нет аккаунта? <a href="/register">Зарегистрируйтесь</a>.</p>
-    </div>
+<main class="auth-shell">
+    <section class="auth-card fade-up">
+        <div class="eyebrow">Student Projects</div>
+        <h1 class="auth-title">Вход</h1>
+        <p class="hero-text">
+            Открой каталог инициатив, просмотри роли в командах и управляй своими откликами
+            из одного аккуратного интерфейса.
+        </p>
 
-    <script>
-        const API_URL = "http://127.0.0.1:8000";
+        <form id="loginForm" style="margin-top: 24px;">
+            <div class="field">
+                <label for="login">Логин или email</label>
+                <input class="control" id="login" type="text" required placeholder="student42 или you@example.com">
+            </div>
+            <div class="field">
+                <label for="password">Пароль</label>
+                <input class="control" id="password" type="password" required placeholder="Минимум 8 символов">
+            </div>
+            <div class="button-row" style="margin-top: 18px;">
+                <button class="button button-primary" type="submit">Войти</button>
+                <a class="button-link" href="/register">Создать аккаунт</a>
+            </div>
+        </form>
 
-        async function loginUser() {
-            const username = document.getElementById("loginUsername").value;
-            const password = document.getElementById("loginPassword").value;
+        <div class="message" id="errorBox"></div>
+        <p class="auth-footer">Поддерживается вход и по username, и по email.</p>
+    </section>
+</main>
 
-            if (!username || !password) {
-                alert("Заполните все поля!");
+<script>
+    const API = window.location.origin;
+
+    document.getElementById("loginForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const errorBox = document.getElementById("errorBox");
+        errorBox.textContent = "";
+        errorBox.className = "message";
+
+        const payload = {
+            login: document.getElementById("login").value.trim(),
+            password: document.getElementById("password").value
+        };
+
+        try {
+            const response = await fetch(`${API}/api/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                errorBox.textContent = data.detail || "Не удалось войти.";
+                errorBox.classList.add("message-error");
                 return;
             }
 
-            try {
-                const response = await fetch(`${API_URL}/login`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password })
-                });
-
-                if (response.ok) {
-                    alert("Вход выполнен успешно!");
-                    window.location.href = "/";
-                } else {
-                    const errorData = await response.json();
-                    alert(`Ошибка входа: ${errorData.detail || "Неизвестная ошибка"}`);
-                }
-            } catch (error) {
-                console.error("Ошибка при отправке запроса:", error);
-                alert("Произошла ошибка при входе. Проверьте консоль.");
-            }
+            window.location.href = "/";
+        } catch (error) {
+            errorBox.textContent = "Сетевая ошибка. Попробуй ещё раз.";
+            errorBox.classList.add("message-error");
         }
-    </script>
+    });
+</script>
 </body>
 </html>

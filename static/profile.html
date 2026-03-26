@@ -2,194 +2,449 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>🎓 Профиль</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            background: url('https://flatonika.ru/wp-content/uploads/2014/09/Krasivie-foni-dlya-sayta-Background-01-e1409774556464.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            z-index: -1;
-        }
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .profile-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: #007BFF;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            font-weight: bold;
-            margin: 0 auto 15px;
-        }
-        .profile-name {
-            font-size: 2em;
-            margin: 10px 0;
-            color: #333;
-        }
-        .profile-meta {
-            color: #666;
-            font-size: 1.1em;
-        }
-        .you-badge {
-            background: #28a745;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.9em;
-            margin-left: 10px;
-        }
-        .projects-list {
-            display: grid;
-            gap: 20px;
-        }
-        .project-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        .project-card h3 {
-            margin-top: 0;
-            color: #333;
-        }
-        .project-card p {
-            color: #555;
-        }
-        .tag {
-            display: inline-block;
-            background: #e0e0e0;
-            padding: 4px 10px;
-            margin: 4px;
-            border-radius: 20px;
-            font-size: 0.85em;
-        }
-        a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #007BFF;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="/static/theme.css">
 </head>
 <body>
-    <div class="container">
-        <a href="/" class="back-link">← Назад к каталогу</a>
-
-        <div class="profile-header">
-            <div class="avatar" id="avatar">?</div>
-            <div class="profile-name" id="profileName">Загрузка...</div>
-            <div class="profile-meta">
-                Проектов: <span id="projectCount">0</span>
-                <span id="youBadge" style="display:none;" class="you-badge">Это вы</span>
+<header class="topbar">
+    <div class="topbar-row">
+        <div class="brand-lockup">
+            <div class="brand-mark">SP</div>
+            <div class="brand-copy">
+                <strong>Profile Workspace</strong>
+                <span>Роли, навыки, опубликованные проекты и отклики</span>
             </div>
         </div>
-
-        <div class="projects-list" id="projectsList">
-            <!-- Сюда подгружаем проекты -->
+        <div class="topbar-actions">
+            <a class="button-link" href="/">Каталог</a>
+            <div id="notificationsHost"></div>
+            <div class="muted" id="topbarMeta"></div>
         </div>
     </div>
+</header>
 
-    <script>
-        const API_URL = "http://127.0.0.1:8000";
-        const pathParts = window.location.pathname.split('/');
-        const username = pathParts[pathParts.length - 1]; // последняя часть URL
+<main class="app-shell">
+    <section class="hero fade-up">
+        <div class="hero-card profile-hero-card">
+            <div class="profile-hero-layout">
+                <div class="profile-hero-copy">
+                    <div class="eyebrow">Profile</div>
+                    <h1 class="hero-title" id="profileTitle">Загрузка профиля...</h1>
+                    <p class="hero-text" id="profileBio">Подготавливаем данные пользователя и его карточки проектов.</p>
+                    <div class="hero-metrics" id="heroMetrics">
+                        <div class="metric">
+                            <strong id="projectsMetric">0</strong>
+                            <span>опубликованных проектов</span>
+                        </div>
+                    </div>
+                    <div class="chip-row" id="profileChips" style="margin-top: 18px;"></div>
+                </div>
 
-        async function loadProfile() {
-            try {
-                // Определяем, чей профиль запрошен
-                const isMyProfile = username === 'me';
-                const profileUrl = isMyProfile 
-                    ? `${API_URL}/api/profile/me`
-                    : `${API_URL}/api/profile/${username}`;
-
-                const profileRes = await fetch(profileUrl);
-                if (!profileRes.ok) {
-                    document.querySelector('.container').innerHTML = 
-                        `<p style="text-align:center; margin-top:50px;">Пользователь не найден.</p>`;
-                    return;
-                }
-
-                const profile = await profileRes.json();
-
-                // Заполняем данные
-                document.getElementById('profileName').textContent = profile.username;
-                document.getElementById('projectCount').textContent = profile.project_count;
-                document.getElementById('avatar').textContent = profile.username.charAt(0).toUpperCase();
-
-                // Проверяем, это текущий пользователь?
-                if (isMyProfile) {
-                    document.getElementById('youBadge').style.display = 'inline';
-                } else {
-                    const meRes = await fetch(`${API_URL}/me`);
-                    if (meRes.ok) {
-                        const me = await meRes.json();
-                        if (me.username === profile.username) {
-                            document.getElementById('youBadge').style.display = 'inline';
-                        }
-                    }
-                }
-
-                // Отображаем проекты
-                const projectsList = document.getElementById('projectsList');
-                if (profile.projects.length === 0) {
-                    projectsList.innerHTML = '<p>Пока нет проектов.</p>';
-                } else {
-                    projectsList.innerHTML = profile.projects.map(p => `
-                        <div class="project-card">
-                            <h3>${p.title}</h3>
-                            <p>${p.description}</p>
-                            <div>
-                                ${p.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
-                            </div>
-                            <div>
-                                <a href="${p.github_url}" target="_blank">GitHub</a>
-                                ${p.demo_url ? ` | <a href="${p.demo_url}" target="_blank">Демо</a>` : ""}
+                <aside class="profile-hero-media">
+                    <div class="profile-photo-card" id="profilePhotoCard">
+                        <div class="profile-photo-backdrop"></div>
+                        <img class="profile-photo-image" id="profilePhotoImage" alt="Фото профиля" hidden>
+                        <div class="profile-photo-placeholder" id="profilePhotoPlaceholder">
+                            <div class="profile-photo-monogram" id="profilePhotoMonogram">SP</div>
+                            <div class="profile-photo-copy">
+                                <strong id="profilePhotoCaption">Profile Portrait</strong>
+                                <span id="profilePhotoSubcaption">Добавь фото, чтобы профиль выглядел как законченная публичная карточка.</span>
                             </div>
                         </div>
-                    `).join('');
-                }
+                        <div class="profile-photo-glow"></div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
 
-            } catch (e) {
-                console.error("Ошибка загрузки профиля", e);
-                document.querySelector('.container').innerHTML = 
-                    `<p style="text-align:center; margin-top:50px;">Ошибка загрузки профиля.</p>`;
-            }
+    <section class="page-grid">
+        <aside class="stack" id="editPanel" style="display:none;">
+            <section class="section-card fade-up">
+                <h2>Редактировать профиль</h2>
+                <p class="section-subtitle">
+                    Эти данные видны в карточке пользователя и помогают другим быстрее понять,
+                    на какую роль ты подойдёшь в команде.
+                </p>
+
+                <form id="profileForm">
+                    <div class="field">
+                        <label for="fullName">Имя</label>
+                        <input class="control" id="fullName" type="text">
+                    </div>
+                    <div class="field">
+                        <label for="bio">Короткое описание</label>
+                        <textarea class="control-area" id="bio"></textarea>
+                    </div>
+                    <div class="field">
+                        <label for="photoFile">Фото профиля</label>
+                        <input class="control" id="photoFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+                        <input id="photoUrl" type="hidden">
+                        <div class="button-row" style="margin-top: 10px;">
+                            <button class="button" type="button" id="uploadPhotoBtn">Загрузить фото</button>
+                            <span class="muted" id="photoUploadMeta">Можно JPG, PNG, WEBP или GIF до 5 МБ.</span>
+                        </div>
+                        <div class="helper">Файл загрузится в проект и автоматически появится в правом блоке профиля.</div>
+                    </div>
+                    <div class="field">
+                        <label for="skills">Навыки</label>
+                        <input class="control" id="skills" type="text" placeholder="python, fastapi, sql">
+                    </div>
+                    <div class="field">
+                        <label for="roles">Роли</label>
+                        <input class="control" id="roles" type="text" placeholder="backend, analyst">
+                    </div>
+                    <div class="field">
+                        <label for="links">Ссылки</label>
+                        <input class="control" id="links" type="text" placeholder="https://github.com/me, https://t.me/me">
+                    </div>
+                    <div class="button-row">
+                        <button class="button button-primary" type="submit">Сохранить изменения</button>
+                    </div>
+                    <div class="message" id="formMessage"></div>
+                </form>
+            </section>
+        </aside>
+
+        <section class="stack">
+            <section class="section-card fade-up">
+                <div class="section-title-row">
+                    <div>
+                        <h2>Проекты пользователя</h2>
+                        <p class="section-subtitle" id="projectsMeta">Загрузка списка проектов...</p>
+                    </div>
+                </div>
+                <div class="stack" id="projectsList"></div>
+            </section>
+
+            <section class="section-card fade-up" id="applicationsBlock" style="display:none;">
+                <div class="section-title-row">
+                    <div>
+                        <h2>Мои отклики</h2>
+                        <p class="section-subtitle">Статусы заявок на чужие проекты.</p>
+                    </div>
+                </div>
+                <div class="stack" id="applicationsList"></div>
+            </section>
+        </section>
+    </section>
+</main>
+
+<script src="/static/notifications.js"></script>
+<script>
+    const API = window.location.origin;
+    const pathParts = window.location.pathname.split("/");
+    const username = pathParts[pathParts.length - 1];
+    let draftPhotoObjectUrl = null;
+    const allowedPhotoTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/gif"]);
+
+    function csv(value) {
+        if (!value || !value.length) return "";
+        return value.join(", ");
+    }
+
+    function formatDate(value) {
+        if (!value) return "дата не указана";
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? value : date.toLocaleString("ru-RU");
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function monogram(value) {
+        const source = (value || "SP").trim();
+        const parts = source.split(/\s+/).filter(Boolean);
+        if (!parts.length) return "SP";
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase();
+    }
+
+    function renderProfilePhoto(user) {
+        const card = document.getElementById("profilePhotoCard");
+        const image = document.getElementById("profilePhotoImage");
+        const placeholder = document.getElementById("profilePhotoPlaceholder");
+        const caption = document.getElementById("profilePhotoCaption");
+        const subcaption = document.getElementById("profilePhotoSubcaption");
+        const monogramNode = document.getElementById("profilePhotoMonogram");
+        const displayName = user.full_name || user.username;
+
+        caption.textContent = displayName;
+        subcaption.textContent = user.roles.length
+            ? `Роли: ${user.roles.join(", ")}`
+            : "Добавь роли и фото, чтобы профиль выглядел как сильная публичная визитка.";
+        monogramNode.textContent = monogram(displayName);
+
+        if (!user.photo_url) {
+            card.classList.remove("has-photo");
+            image.hidden = true;
+            image.removeAttribute("src");
+            placeholder.hidden = false;
+            return;
         }
 
-        window.onload = loadProfile;
-    </script>
+        image.src = user.photo_url;
+        image.hidden = false;
+        placeholder.hidden = true;
+        card.classList.add("has-photo");
+
+        image.onerror = () => {
+            card.classList.remove("has-photo");
+            image.hidden = true;
+            image.removeAttribute("src");
+            placeholder.hidden = false;
+            subcaption.textContent = "Фото не загрузилось. Проверь ссылку и попробуй снова.";
+        };
+    }
+
+    function revokeDraftPhoto() {
+        if (draftPhotoObjectUrl) {
+            URL.revokeObjectURL(draftPhotoObjectUrl);
+            draftPhotoObjectUrl = null;
+        }
+    }
+
+    function previewDraftPhoto(file) {
+        revokeDraftPhoto();
+        draftPhotoObjectUrl = URL.createObjectURL(file);
+
+        const card = document.getElementById("profilePhotoCard");
+        const image = document.getElementById("profilePhotoImage");
+        const placeholder = document.getElementById("profilePhotoPlaceholder");
+        const caption = document.getElementById("profilePhotoCaption");
+        const subcaption = document.getElementById("profilePhotoSubcaption");
+
+        card.classList.add("has-photo");
+        image.src = draftPhotoObjectUrl;
+        image.hidden = false;
+        placeholder.hidden = true;
+        caption.textContent = "Черновой предпросмотр";
+        subcaption.textContent = "Если кадр нравится, нажми «Загрузить фото», и он сохранится в профиле.";
+    }
+
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const result = String(reader.result || "");
+                const base64Payload = result.includes(",") ? result.split(",")[1] : result;
+                resolve(base64Payload);
+            };
+            reader.onerror = () => reject(new Error("Не удалось прочитать файл."));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function projectCard(project) {
+        const tags = project.tags.map(tag => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
+        const roles = project.required_roles.map(role => `<span class="chip chip-role">${escapeHtml(role)}</span>`).join("");
+        const statusClass = project.status === "active" ? "status-active" : "status-archived";
+        return `
+            <article class="project-card fade-up">
+                <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <h3>${escapeHtml(project.title)}</h3>
+                    <span class="status-pill ${statusClass}">${project.status === "active" ? "Активен" : "Архив"}</span>
+                </div>
+                <p>${escapeHtml(project.description)}</p>
+                <div class="chips" style="margin-top: 14px;">${tags}${roles}</div>
+                <div class="card-meta">
+                    Создан: ${formatDate(project.created_at)}<br>
+                    Откликов: ${project.applications_count}
+                </div>
+                <div class="button-row">
+                    <a class="button-link button-primary" href="/project/${project.id}">Открыть проект</a>
+                    ${project.github_url ? `<a class="button-link" target="_blank" href="${escapeHtml(project.github_url)}">GitHub</a>` : ""}
+                </div>
+            </article>
+        `;
+    }
+
+    function applicationCard(application) {
+        const statusClass = `status-${application.status}`;
+        return `
+            <article class="application-card fade-up">
+                <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <h3>${escapeHtml(application.project_title)}</h3>
+                    <span class="status-pill ${statusClass}">${escapeHtml(application.status)}</span>
+                </div>
+                <p>${escapeHtml(application.message)}</p>
+                <div class="card-meta">Отправлен: ${formatDate(application.created_at)}</div>
+            </article>
+        `;
+    }
+
+    function fillProfile(user) {
+        document.getElementById("profileTitle").textContent = user.full_name || user.username;
+        document.getElementById("profileBio").textContent = user.bio || "Пользователь пока не добавил описание.";
+        renderProfilePhoto(user);
+
+        const chips = [];
+        chips.push(`<span class="chip chip-muted">@${escapeHtml(user.username)}</span>`);
+        if (user.email) chips.push(`<span class="chip chip-muted">${escapeHtml(user.email)}</span>`);
+        user.skills.forEach(skill => chips.push(`<span class="chip">${escapeHtml(skill)}</span>`));
+        user.roles.forEach(role => chips.push(`<span class="chip chip-role">${escapeHtml(role)}</span>`));
+        user.links.forEach(link => chips.push(`<a class="button-link" target="_blank" href="${escapeHtml(link)}">Ссылка</a>`));
+        document.getElementById("profileChips").innerHTML = chips.join("");
+    }
+
+    async function loadProfile() {
+        const isMine = username === "me";
+        const url = isMine ? `${API}/api/profile/me` : `${API}/api/profile/${username}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (!response.ok) {
+            document.getElementById("profileTitle").textContent = "Профиль не найден";
+            document.getElementById("profileBio").textContent = data.detail || "Не удалось загрузить пользователя.";
+            return;
+        }
+
+        fillProfile(data.user);
+        document.getElementById("projectsMetric").textContent = String(data.project_count);
+        document.getElementById("projectsMeta").textContent = `Опубликовано проектов: ${data.project_count}`;
+        document.getElementById("projectsList").innerHTML = data.projects.length
+            ? data.projects.map(projectCard).join("")
+            : `<article class="empty-card fade-up"><h3>Пока пусто</h3><p>У пользователя ещё нет опубликованных проектов.</p></article>`;
+
+        document.getElementById("topbarMeta").textContent = data.is_current_user ? "Это ваш профиль" : `Профиль @${data.user.username}`;
+
+        if (data.is_current_user) {
+            document.getElementById("editPanel").style.display = "grid";
+            document.getElementById("fullName").value = data.user.full_name || "";
+            document.getElementById("bio").value = data.user.bio || "";
+            document.getElementById("photoUrl").value = data.user.photo_url || "";
+            document.getElementById("skills").value = csv(data.user.skills);
+            document.getElementById("roles").value = csv(data.user.roles);
+            document.getElementById("links").value = csv(data.user.links);
+
+            document.getElementById("applicationsBlock").style.display = "block";
+            document.getElementById("applicationsList").innerHTML = data.applications.length
+                ? data.applications.map(applicationCard).join("")
+                : `<article class="empty-card fade-up"><h3>Откликов пока нет</h3><p>Здесь появятся ваши заявки на чужие проекты.</p></article>`;
+        }
+    }
+
+    function parseCSV(value) {
+        return value.split(",").map(item => item.trim()).filter(Boolean);
+    }
+
+    document.getElementById("photoFile").addEventListener("change", (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+            return;
+        }
+        if (!allowedPhotoTypes.has(file.type)) {
+            document.getElementById("photoUploadMeta").textContent = "Поддерживаются только JPG, PNG, WEBP и GIF.";
+            event.target.value = "";
+            return;
+        }
+        previewDraftPhoto(file);
+        document.getElementById("photoUploadMeta").textContent = `${file.name} • ${(file.size / 1024 / 1024).toFixed(2)} МБ`;
+    });
+
+    document.getElementById("uploadPhotoBtn").addEventListener("click", async () => {
+        const fileInput = document.getElementById("photoFile");
+        const file = fileInput.files && fileInput.files[0];
+        const meta = document.getElementById("photoUploadMeta");
+        const message = document.getElementById("formMessage");
+
+        if (!file) {
+            meta.textContent = "Сначала выбери файл.";
+            return;
+        }
+        if (!allowedPhotoTypes.has(file.type)) {
+            meta.textContent = "Поддерживаются только JPG, PNG, WEBP и GIF.";
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            meta.textContent = "Файл слишком большой. Нужен размер до 5 МБ.";
+            return;
+        }
+
+        meta.textContent = "Загружаем фото...";
+        message.textContent = "";
+        message.className = "message";
+
+        try {
+            const contentBase64 = await readFileAsBase64(file);
+            const response = await fetch(`${API}/api/profile/me/photo`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    file_name: file.name,
+                    mime_type: file.type,
+                    content_base64: contentBase64
+                })
+            });
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                meta.textContent = data.detail || "Не удалось загрузить фото.";
+                message.textContent = data.detail || "Не удалось загрузить фото.";
+                message.classList.add("message-error");
+                return;
+            }
+
+            document.getElementById("photoUrl").value = data.photo_url || "";
+            meta.textContent = "Фото загружено и сохранено в профиле.";
+            message.textContent = "Фото профиля обновлено.";
+            message.classList.add("message-success");
+            revokeDraftPhoto();
+            fileInput.value = "";
+            renderProfilePhoto(data.user);
+        } catch (error) {
+            meta.textContent = "Ошибка при загрузке фото.";
+            message.textContent = "Ошибка при загрузке фото.";
+            message.classList.add("message-error");
+        }
+    });
+
+    document.getElementById("profileForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const message = document.getElementById("formMessage");
+        message.textContent = "";
+        message.className = "message";
+
+        const payload = {
+            full_name: document.getElementById("fullName").value.trim(),
+            bio: document.getElementById("bio").value.trim(),
+            photo_url: document.getElementById("photoUrl").value.trim(),
+            skills: parseCSV(document.getElementById("skills").value),
+            roles: parseCSV(document.getElementById("roles").value),
+            links: parseCSV(document.getElementById("links").value)
+        };
+
+        const response = await fetch(`${API}/api/profile/me`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            message.textContent = data.detail || "Не удалось обновить профиль.";
+            message.classList.add("message-error");
+            return;
+        }
+
+        message.textContent = "Профиль обновлён.";
+        message.classList.add("message-success");
+        loadProfile();
+    });
+
+    window.addEventListener("load", () => {
+        if (window.initNotifications) {
+            window.initNotifications({ hostId: "notificationsHost" });
+        }
+        loadProfile();
+    });
+</script>
 </body>
 </html>

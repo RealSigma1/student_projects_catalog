@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проект</title>
+    <link rel="stylesheet" href="/static/theme.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="topbar-row">
+        <div class="brand-lockup">
+            <div class="brand-mark">SP</div>
+            <div class="brand-copy">
+                <strong>Project View</strong>
+                <span>Карточка проекта, отклики и управление заявками</span>
+            </div>
+        </div>
+        <div class="topbar-actions">
+            <a class="button-link" href="/">Каталог</a>
+            <div id="notificationsHost"></div>
+            <a class="button-link" id="authorLink" href="/profile/me">Профиль автора</a>
+        </div>
+    </div>
+</header>
+
+<main class="app-shell">
+    <section class="hero fade-up">
+        <div class="hero-card">
+            <div class="eyebrow">Project</div>
+            <h1 class="hero-title" id="title">Загрузка проекта...</h1>
+            <p class="hero-text" id="description">Собираем детали карточки, роли и ссылки.</p>
+            <div class="chip-row" id="chips" style="margin-top: 18px;"></div>
+            <div class="hero-metrics" id="meta">
+                <div class="metric">
+                    <strong>...</strong>
+                    <span>обновляем данные</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="split-panel">
+        <section class="stack">
+            <section class="section-card fade-up">
+                <h2>Материалы проекта</h2>
+                <p class="section-subtitle">
+                    GitHub, demo и контакты автора. Если чего-то нет, значит автор ещё не добавил эти данные.
+                </p>
+                <div class="detail-list" id="linksBlock"></div>
+            </section>
+
+            <section class="section-card fade-up" id="applyBlock" style="display:none;">
+                <h2>Откликнуться на проект</h2>
+                <p class="section-subtitle">
+                    Один пользователь может отправить только один отклик. Кратко опиши свой опыт и полезную роль в команде.
+                </p>
+                <form id="applyForm">
+                    <div class="field">
+                        <label for="message">Сообщение</label>
+                        <textarea class="control-area" id="message" placeholder="Кто вы, какой у вас опыт и почему хотите присоединиться."></textarea>
+                    </div>
+                    <div class="button-row">
+                        <button class="button button-primary" type="submit">Отправить отклик</button>
+                    </div>
+                    <div class="message" id="applyMessage"></div>
+                </form>
+            </section>
+
+            <section class="section-card fade-up" id="myApplicationBlock" style="display:none;">
+                <h2>Мой отклик</h2>
+                <div id="myApplicationCard"></div>
+            </section>
+
+            <section class="section-card fade-up" id="ownerApplicationsBlock" style="display:none;">
+                <h2>Отклики на проект</h2>
+                <p class="section-subtitle">
+                    Просмотр и изменение статусов доступны только владельцу проекта.
+                </p>
+                <div class="stack" id="applicationsList"></div>
+            </section>
+        </section>
+
+        <aside class="stack" id="ownerPanel" style="display:none;">
+            <section class="section-card fade-up">
+                <h2>Управление проектом</h2>
+                <p class="section-subtitle">
+                    Обнови описание, роли, ссылки или переведи карточку в архивный статус.
+                </p>
+                <form id="editForm">
+                    <div class="field">
+                        <label for="editTitle">Название</label>
+                        <input class="control" id="editTitle" type="text">
+                    </div>
+                    <div class="field">
+                        <label for="editDescription">Описание</label>
+                        <textarea class="control-area" id="editDescription"></textarea>
+                    </div>
+                    <div class="field">
+                        <label for="editTags">Теги</label>
+                        <input class="control" id="editTags" type="text">
+                    </div>
+                    <div class="field">
+                        <label for="editRoles">Требуемые роли</label>
+                        <input class="control" id="editRoles" type="text">
+                    </div>
+                    <div class="field">
+                        <label for="editGithub">GitHub</label>
+                        <input class="control" id="editGithub" type="text">
+                    </div>
+                    <div class="field">
+                        <label for="editDemo">Demo</label>
+                        <input class="control" id="editDemo" type="text">
+                    </div>
+                    <div class="field">
+                        <label for="editContact">Контакты</label>
+                        <textarea class="control-area" id="editContact"></textarea>
+                    </div>
+                    <div class="field">
+                        <label for="editStatus">Статус</label>
+                        <select class="control-select" id="editStatus">
+                            <option value="active">active</option>
+                            <option value="archived">archived</option>
+                        </select>
+                    </div>
+                    <div class="button-row">
+                        <button class="button button-primary" type="submit">Сохранить изменения</button>
+                        <button class="button button-warning" type="button" id="deleteBtn">Удалить проект</button>
+                    </div>
+                    <div class="message" id="editMessage"></div>
+                </form>
+            </section>
+        </aside>
+    </section>
+</main>
+
+<script src="/static/notifications.js"></script>
+<script>
+    const API = window.location.origin;
+    const projectId = window.location.pathname.split("/").pop();
+
+    function csv(value) {
+        return value.join(", ");
+    }
+
+    function formatDate(value) {
+        if (!value) return "дата не указана";
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? value : date.toLocaleString("ru-RU");
+    }
+
+    function applicationCard(item) {
+        const profileUrl = `/profile/${item.applicant_username}`;
+        const actions = item.status === "new"
+            ? `
+                <div class="button-row">
+                    <button class="button button-secondary" type="button" onclick="setApplicationStatus(${item.id}, 'accepted')">Принять</button>
+                    <button class="button button-warning" type="button" onclick="setApplicationStatus(${item.id}, 'rejected')">Отклонить</button>
+                </div>
+            `
+            : `<div class="card-meta">Решение зафиксировано. Повторно изменить статус нельзя.</div>`;
+
+        return `
+            <article class="application-card fade-up">
+                <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <h3><a href="${profileUrl}" style="text-decoration: none;">${item.applicant_full_name || item.applicant_username}</a></h3>
+                    <span class="status-pill status-${item.status}">${item.status}</span>
+                </div>
+                <p>${item.message}</p>
+                <div class="chip-row" style="margin: 12px 0;">
+                    ${(item.applicant_roles || []).map(role => `<span class="chip chip-role">${role}</span>`).join("")}
+                    <a class="chip chip-muted" href="${profileUrl}" style="text-decoration: none;">@${item.applicant_username}</a>
+                    <a class="button-link" href="${profileUrl}">Открыть профиль</a>
+                </div>
+                <div class="card-meta">Отправлен: ${formatDate(item.created_at)}</div>
+                ${actions}
+            </article>
+        `;
+    }
+
+    function parseCSV(value) {
+        return value.split(",").map(item => item.trim()).filter(Boolean);
+    }
+
+    function fillProjectView(project) {
+        document.getElementById("title").textContent = project.title;
+        document.getElementById("description").textContent = project.description;
+        document.getElementById("authorLink").href = `/profile/${project.owner_username}`;
+        document.getElementById("authorLink").textContent = project.owner_full_name || project.owner_username;
+
+        const chips = [
+            ...project.tags.map(tag => `<span class="chip">${tag}</span>`),
+            ...project.required_roles.map(role => `<span class="chip chip-role">${role}</span>`),
+            `<span class="status-pill ${project.status === "active" ? "status-active" : "status-archived"}">${project.status}</span>`
+        ];
+        document.getElementById("chips").innerHTML = chips.join("");
+        document.getElementById("meta").innerHTML = `
+            <div class="metric">
+                <strong>${project.owner_full_name || project.owner_username}</strong>
+                <span>автор проекта</span>
+            </div>
+            <div class="metric">
+                <strong>${project.applications_count}</strong>
+                <span>откликов сейчас</span>
+            </div>
+            <div class="metric">
+                <strong>${formatDate(project.created_at)}</strong>
+                <span>дата публикации</span>
+            </div>
+        `;
+
+        const links = [];
+        if (project.github_url) links.push(`<article class="info-card fade-up"><h3>GitHub</h3><p><a href="${project.github_url}" target="_blank">${project.github_url}</a></p></article>`);
+        if (project.demo_url) links.push(`<article class="info-card fade-up"><h3>Demo</h3><p><a href="${project.demo_url}" target="_blank">${project.demo_url}</a></p></article>`);
+        if (project.contact_info) links.push(`<article class="info-card fade-up"><h3>Контакты</h3><p>${project.contact_info}</p></article>`);
+        if (!links.length) {
+            links.push(`<article class="empty-card fade-up"><h3>Дополнительных материалов пока нет</h3><p>Автор ещё не добавил GitHub, demo или контакты.</p></article>`);
+        }
+        document.getElementById("linksBlock").innerHTML = links.join("");
+    }
+
+    async function loadProject() {
+        const response = await fetch(`${API}/api/projects/${projectId}`);
+        const data = await response.json();
+        if (!response.ok) {
+            document.getElementById("title").textContent = "Проект не найден";
+            document.getElementById("description").textContent = data.detail || "Не удалось загрузить проект.";
+            return;
+        }
+
+        fillProjectView(data.project);
+
+        if (data.project.can_apply) {
+            document.getElementById("applyBlock").style.display = "block";
+        }
+
+        if (data.current_user_application) {
+            document.getElementById("myApplicationBlock").style.display = "block";
+            document.getElementById("myApplicationCard").innerHTML = `
+                <article class="application-card fade-up">
+                    <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                        <h3>Ваш отклик</h3>
+                        <span class="status-pill status-${data.current_user_application.status}">${data.current_user_application.status}</span>
+                    </div>
+                    <p>${data.current_user_application.message}</p>
+                    <div class="card-meta">Отправлен: ${formatDate(data.current_user_application.created_at)}</div>
+                </article>
+            `;
+        }
+
+        if (data.project.is_owner) {
+            document.getElementById("ownerPanel").style.display = "grid";
+            document.getElementById("ownerApplicationsBlock").style.display = "block";
+            document.getElementById("applicationsList").innerHTML = data.applications.length
+                ? data.applications.map(applicationCard).join("")
+                : `<article class="empty-card fade-up"><h3>Пока нет откликов</h3><p>Когда кто-то откликнется на проект, заявки появятся здесь.</p></article>`;
+
+            document.getElementById("editTitle").value = data.project.title;
+            document.getElementById("editDescription").value = data.project.description;
+            document.getElementById("editTags").value = csv(data.project.tags);
+            document.getElementById("editRoles").value = csv(data.project.required_roles);
+            document.getElementById("editGithub").value = data.project.github_url || "";
+            document.getElementById("editDemo").value = data.project.demo_url || "";
+            document.getElementById("editContact").value = data.project.contact_info || "";
+            document.getElementById("editStatus").value = data.project.status;
+        }
+    }
+
+    async function setApplicationStatus(applicationId, status) {
+        const confirmMessage = status === "accepted"
+            ? "Вы точно хотите принять эту заявку?"
+            : "Вы точно хотите отклонить эту заявку?";
+
+        if (!window.confirm(confirmMessage)) {
+            return;
+        }
+
+        const response = await fetch(`${API}/api/applications/${applicationId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status })
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            window.alert(data.detail || "Не удалось изменить статус отклика.");
+            return;
+        }
+        loadProject();
+    }
+    window.setApplicationStatus = setApplicationStatus;
+
+    document.getElementById("applyForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const messageBox = document.getElementById("applyMessage");
+        messageBox.textContent = "";
+        messageBox.className = "message";
+
+        const response = await fetch(`${API}/api/projects/${projectId}/applications`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: document.getElementById("message").value.trim() })
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            messageBox.textContent = data.detail || "Не удалось отправить отклик.";
+            messageBox.classList.add("message-error");
+            return;
+        }
+
+        messageBox.textContent = "Отклик отправлен.";
+        messageBox.classList.add("message-success");
+        document.getElementById("applyForm").reset();
+        loadProject();
+    });
+
+    document.getElementById("editForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const messageBox = document.getElementById("editMessage");
+        messageBox.textContent = "";
+        messageBox.className = "message";
+
+        const payload = {
+            title: document.getElementById("editTitle").value.trim(),
+            description: document.getElementById("editDescription").value.trim(),
+            tags: parseCSV(document.getElementById("editTags").value),
+            required_roles: parseCSV(document.getElementById("editRoles").value),
+            github_url: document.getElementById("editGithub").value.trim(),
+            demo_url: document.getElementById("editDemo").value.trim(),
+            contact_info: document.getElementById("editContact").value.trim(),
+            status: document.getElementById("editStatus").value
+        };
+
+        const response = await fetch(`${API}/api/projects/${projectId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            messageBox.textContent = data.detail || "Не удалось обновить проект.";
+            messageBox.classList.add("message-error");
+            return;
+        }
+
+        messageBox.textContent = "Изменения сохранены.";
+        messageBox.classList.add("message-success");
+        loadProject();
+    });
+
+    document.getElementById("deleteBtn").addEventListener("click", async () => {
+        if (!window.confirm("Удалить проект? Это действие необратимо.")) return;
+        const response = await fetch(`${API}/api/projects/${projectId}`, { method: "DELETE" });
+        if (response.ok) {
+            window.location.href = "/";
+        }
+    });
+
+    window.addEventListener("load", () => {
+        if (window.initNotifications) {
+            window.initNotifications({ hostId: "notificationsHost" });
+        }
+        loadProject();
+    });
+</script>
+</body>
+</html>

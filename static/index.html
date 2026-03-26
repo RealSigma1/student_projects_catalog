@@ -2,287 +2,231 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>🎓 Каталог студенческих проектов</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            line-height: 1.6;
-            background: url('https://flatonika.ru/wp-content/uploads/2014/09/Krasivie-foni-dlya-sayta-Background-01-e1409774556464.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            z-index: -1;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 2.5em;
-            color: #4a4a4a;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        #userProfile {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-            color: #2c3e50;
-            font-weight: bold;
-        }
-
-        a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        form {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 25px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        form h3 {
-            margin-bottom: 15px;
-            font-size: 1.5em;
-            color: #333;
-        }
-
-        input, textarea, button {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s ease;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #007BFF;
-            outline: none;
-        }
-
-        button {
-            background: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #0056b3;
-        }
-
-        .search-section {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .search-section input {
-            width: 60%;
-            display: inline-block;
-        }
-
-        .search-section button {
-            margin-left: 10px;
-            padding: 10px 15px;
-        }
-
-        #projectsList {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .project-card {
-            background: #ffffff;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .project-card h3 {
-            margin-top: 0;
-            font-size: 1.3em;
-            color: #333;
-        }
-
-        .project-card p {
-            margin: 10px 0;
-            color: #555;
-        }
-
-        .tag {
-            display: inline-block;
-            background: #e0e0e0;
-            padding: 5px 10px;
-            margin: 5px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            color: #333;
-        }
-
-        .project-card a {
-            color: #007BFF;
-            font-weight: bold;
-        }
-
-        .project-card a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог проектов</title>
+    <link rel="stylesheet" href="/static/theme.css">
 </head>
 <body>
-    <h1>🎓 Каталог студенческих проектов</h1>
-
-    <div id="userProfile">Загрузка профиля...</div>
-
-    <p style="text-align: center;">Добро пожаловать! <a href="/logout">Выйти</a>.</p>
-
-    <!-- Форма добавления проекта -->
-    <form id="addProjectForm">
-        <h3>Добавить проект</h3>
-        <input type="text" id="title" placeholder="Название проекта" required><br>
-        <textarea id="description" placeholder="Описание" rows="3" required></textarea><br>
-        <input type="text" id="tags" placeholder="Теги (через запятую: Python, ML, Telegram)" required><br>
-        <input type="url" id="github_url" placeholder="GitHub URL" required><br>
-        <input type="url" id="demo_url" placeholder="Демо (опционально)"><br>
-        <button type="submit">Добавить проект</button>
-    </form>
-
-    <!-- Поиск по тегам -->
-    <div class="search-section">
-        <input type="text" id="searchTags" placeholder="Введите теги (через запятую)">
-        <button onclick="searchProjects()">Искать</button>
-        <button onclick="loadAllProjects()">Показать все</button>
+<header class="topbar">
+    <div class="topbar-row">
+        <div class="brand-lockup">
+            <div class="brand-mark">SP</div>
+            <div class="brand-copy">
+                <strong>Student Projects</strong>
+                <span>Каталог студенческих инициатив, команд и ролей</span>
+            </div>
+        </div>
+        <div class="topbar-actions">
+            <a class="button-link button-primary" href="/projects/new">Создать проект</a>
+            <div id="notificationsHost"></div>
+            <a class="button-link" id="profileLink" href="/profile/me">Профиль</a>
+            <button class="button" type="button" id="logoutBtn">Выйти</button>
+        </div>
     </div>
+</header>
 
-    <!-- Результаты -->
-    <div id="projectsList"></div>
+<main class="app-shell">
+    <section class="hero fade-up">
+        <div class="hero-card">
+            <div class="eyebrow">Project Catalog</div>
+            <h1 class="hero-title">Ищи проекты по ролям, стеку и задачам</h1>
+            <p class="hero-text">
+                Смотри активные карточки, фильтруй по тегам и ролям, открывай подробности проекта и переходи к профилям авторов
+            </p>
+            <div class="hero-metrics">
+                <div class="metric">
+                    <strong id="metricProjects">0</strong>
+                    <span>проектов в каталоге</span>
+                </div>
+                <div class="metric">
+                    <strong id="metricPage">1</strong>
+                    <span>текущая страница</span>
+                </div>
+                <div class="metric">
+                    <strong id="metricFilters">0</strong>
+                    <span>активных фильтров</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script>
-        const API_URL = "http://127.0.0.1:8000";
+    <section class="catalog-shell">
+        <section class="section-card fade-up">
+            <div class="section-title-row">
+                <div>
+                    <h2>Каталог проектов</h2>
+                    <p class="section-subtitle" id="catalogMeta">Загрузка списка проектов...</p>
+                </div>
+            </div>
 
-        async function loadUserProfile() {
-            try {
-                const response = await fetch(`${API_URL}/me`);
-                if (response.ok) {
-                    const user = await response.json();
-                    document.getElementById("userProfile").innerHTML = `
-                        👤 Вы вошли как: <strong><a href="/profile/me">${user.username}</a></strong>
-                    `;
-                } else {
-                    document.getElementById("userProfile").innerHTML = "❌ Не авторизован";
-                }
-            } catch (e) {
-                console.error("Ошибка загрузки профиля", e);
-                document.getElementById("userProfile").innerHTML = "⚠️ Ошибка загрузки";
-            }
+            <form id="filterForm" class="catalog-filters">
+                <div class="field">
+                    <label for="search">Поиск</label>
+                    <input class="control" id="search" type="text" placeholder="Ключевые слова">
+                </div>
+                <div class="field">
+                    <label for="filterTags">Теги</label>
+                    <input class="control" id="filterTags" type="text" placeholder="fastapi, web">
+                </div>
+                <div class="field">
+                    <label for="filterRoles">Роли</label>
+                    <input class="control" id="filterRoles" type="text" placeholder="backend, analyst">
+                </div>
+                <div class="field">
+                    <label for="statusFilter">Статус</label>
+                    <select class="control-select" id="statusFilter">
+                        <option value="active">Только активные</option>
+                        <option value="all">Все</option>
+                        <option value="archived">Только архив</option>
+                    </select>
+                </div>
+            </form>
+
+            <div class="button-row">
+                <button class="button button-primary" type="button" id="applyFiltersBtn">Применить фильтры</button>
+                <button class="button" type="button" id="resetFiltersBtn">Сбросить</button>
+            </div>
+
+            <div class="card-grid" id="projectsGrid" style="margin-top: 20px;"></div>
+
+            <div class="pager">
+                <button class="button" id="prevPageBtn" type="button">Назад</button>
+                <span class="muted" id="pageInfo">Страница 1</span>
+                <button class="button" id="nextPageBtn" type="button">Вперёд</button>
+            </div>
+        </section>
+    </section>
+</main>
+
+<script src="/static/notifications.js"></script>
+<script>
+    const API = window.location.origin;
+    let currentPage = 1;
+    let totalPages = 1;
+
+    function formatDate(value) {
+        if (!value) return "дата не указана";
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? value : date.toLocaleString("ru-RU");
+    }
+
+    function activeFiltersCount() {
+        const values = [
+            document.getElementById("search").value.trim(),
+            document.getElementById("filterTags").value.trim(),
+            document.getElementById("filterRoles").value.trim(),
+            document.getElementById("statusFilter").value !== "active" ? document.getElementById("statusFilter").value : ""
+        ];
+        return values.filter(Boolean).length;
+    }
+
+    function projectCard(project) {
+        const tags = project.tags.map(tag => `<span class="chip">${tag}</span>`).join("");
+        const roles = project.required_roles.map(role => `<span class="chip chip-role">${role}</span>`).join("");
+        const statusClass = project.status === "active" ? "status-active" : "status-archived";
+        return `
+            <article class="project-card fade-up">
+                <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <h3>${project.title}</h3>
+                    <span class="status-pill ${statusClass}">${project.status === "active" ? "Активен" : "Архив"}</span>
+                </div>
+                <p>${project.description}</p>
+                <div class="chips" style="margin-top: 14px;">${tags}${roles}</div>
+                <div class="card-meta">
+                    Автор: <a href="/profile/${project.owner_username}">${project.owner_full_name || project.owner_username}</a><br>
+                    Откликов: ${project.applications_count}<br>
+                    Создан: ${formatDate(project.created_at)}
+                </div>
+                <div class="button-row">
+                    <a class="button-link button-primary" href="/project/${project.id}">Открыть проект</a>
+                    ${project.github_url ? `<a class="button-link" target="_blank" href="${project.github_url}">GitHub</a>` : ""}
+                </div>
+            </article>
+        `;
+    }
+
+    async function loadCurrentUser() {
+        const response = await fetch(`${API}/api/me`);
+        if (!response.ok) {
+            window.location.href = "/login";
+            return;
         }
+        const user = await response.json();
+        document.getElementById("profileLink").textContent = user.full_name || user.username;
+    }
 
-        document.getElementById("addProjectForm").addEventListener("submit", async function(e) {
-            e.preventDefault();
-            const title = document.getElementById("title").value;
-            const description = document.getElementById("description").value;
-            const tags = document.getElementById("tags").value.split(",").map(t => t.trim());
-            const github_url = document.getElementById("github_url").value;
-            const demo_url = document.getElementById("demo_url").value;
-
-            const response = await fetch(`${API_URL}/projects/`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title, description, tags, github_url, demo_url })
-            });
-
-            if (response.ok) {
-                alert("Проект успешно добавлен!");
-                document.getElementById("addProjectForm").reset();
-                loadAllProjects();
-            } else {
-                const err = await response.json().catch(() => ({}));
-                alert("Ошибка: " + (err.detail || "Неизвестная ошибка"));
-            }
+    async function loadProjects() {
+        const params = new URLSearchParams({
+            page: String(currentPage),
+            page_size: "9",
+            search: document.getElementById("search").value.trim(),
+            tags: document.getElementById("filterTags").value.trim(),
+            roles: document.getElementById("filterRoles").value.trim(),
+            status_filter: document.getElementById("statusFilter").value
         });
 
-        async function loadAllProjects() {
-            const response = await fetch(`${API_URL}/projects/all`);
-            const projects = await response.json();
-            renderProjects(projects);
+        const response = await fetch(`${API}/api/projects?${params.toString()}`);
+        const data = await response.json();
+        const grid = document.getElementById("projectsGrid");
+
+        totalPages = data.pages || 1;
+        document.getElementById("catalogMeta").textContent = `Найдено проектов: ${data.total}. Используй фильтры, чтобы быстрее находить нужные команды.`;
+        document.getElementById("pageInfo").textContent = `Страница ${data.page} из ${data.pages}`;
+        document.getElementById("prevPageBtn").disabled = currentPage <= 1;
+        document.getElementById("nextPageBtn").disabled = currentPage >= totalPages;
+
+        document.getElementById("metricProjects").textContent = String(data.total);
+        document.getElementById("metricPage").textContent = `${data.page}/${data.pages}`;
+        document.getElementById("metricFilters").textContent = String(activeFiltersCount());
+
+        if (!data.items.length) {
+            grid.innerHTML = `
+                <article class="empty-card fade-up">
+                    <h3>Проекты не найдены</h3>
+                    <p>Попробуй изменить фильтры или перейти к созданию новой карточки проекта через кнопку в шапке.</p>
+                </article>
+            `;
+            return;
         }
 
-        async function searchProjects() {
-            const tagInput = document.getElementById("searchTags").value;
-            if (!tagInput) return loadAllProjects();
+        grid.innerHTML = data.items.map(projectCard).join("");
+    }
 
-            const tags = tagInput.split(",").map(t => t.trim());
-            const url = new URL(`${API_URL}/projects/`);
-            tags.forEach(tag => url.searchParams.append("tags", tag));
+    async function logout() {
+        await fetch(`${API}/api/auth/logout`, { method: "POST" });
+        window.location.href = "/login";
+    }
 
-            const response = await fetch(url);
-            const projects = await response.json();
-            renderProjects(projects);
+    document.getElementById("applyFiltersBtn").addEventListener("click", () => {
+        currentPage = 1;
+        loadProjects();
+    });
+    document.getElementById("resetFiltersBtn").addEventListener("click", () => {
+        document.getElementById("filterForm").reset();
+        currentPage = 1;
+        loadProjects();
+    });
+    document.getElementById("prevPageBtn").addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage -= 1;
+            loadProjects();
         }
-
-        function renderProjects(projects) {
-            const container = document.getElementById("projectsList");
-            container.innerHTML = "";
-
-            if (projects.length === 0) {
-                container.innerHTML = "<p style='text-align: center;'>Нет проектов.</p>";
-                return;
-            }
-
-            projects.forEach(p => {
-                const card = document.createElement("div");
-                card.className = "project-card";
-                card.innerHTML = `
-                    <h3>${p.title}</h3>
-                    <p>${p.description}</p>
-                    <div>
-                        ${p.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
-                    </div>
-                    <div>
-                        <a href="${p.github_url}" target="_blank">GitHub</a>
-                        ${p.demo_url ? ` | <a href="${p.demo_url}" target="_blank">Демо</a>` : ""}
-                    </div>
-                    <div style="margin-top: 10px; font-size: 0.95em; color: #555;">
-                        Автор: <strong><a href="/profile/${p.owner_username}">${p.owner_username}</a></strong>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+    });
+    document.getElementById("nextPageBtn").addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            currentPage += 1;
+            loadProjects();
         }
+    });
+    document.getElementById("logoutBtn").addEventListener("click", logout);
 
-        window.onload = () => {
-            loadUserProfile();
-            loadAllProjects();
-        };
-    </script>
+    window.addEventListener("load", async () => {
+        if (window.initNotifications) {
+            window.initNotifications({ hostId: "notificationsHost" });
+        }
+        await loadCurrentUser();
+        await loadProjects();
+    });
+</script>
 </body>
 </html>
