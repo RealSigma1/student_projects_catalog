@@ -64,6 +64,37 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def parse_datetime_for_sort(value: Optional[str]) -> datetime:
+    if not value:
+        return datetime.min.replace(tzinfo=timezone.utc)
+
+    raw = value.strip()
+    candidates = [raw]
+    if raw.endswith("Z"):
+        candidates.append(raw[:-1] + "+00:00")
+
+    for candidate in candidates:
+        try:
+            parsed = datetime.fromisoformat(candidate)
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed
+        except ValueError:
+            continue
+
+    for pattern in ("%d.%m.%Y, %H:%M:%S", "%d.%m.%Y %H:%M:%S", "%Y-%m-%d %H:%M:%S"):
+        try:
+            return datetime.strptime(raw, pattern).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+
+    return datetime.min.replace(tzinfo=timezone.utc)
+
+
+def project_sort_key(project: "ProjectModel") -> tuple[datetime, int]:
+    return parse_datetime_for_sort(project.created_at), project.id or 0
+
+
 def split_csv(value: Optional[str]) -> list[str]:
     if not value:
         return []
@@ -542,6 +573,12 @@ def serialize_notification(notification: NotificationModel) -> dict:
     }
 
 
+def can_view_project(project: ProjectModel, current_user: Optional[UserModel]) -> bool:
+    if project.status == "active":
+        return True
+    return bool(current_user and current_user.id == project.owner_id)
+
+
 def create_notification(
     db: Session,
     *,
@@ -709,7 +746,7 @@ def get_my_profile(current_user: UserModel = Depends(require_current_user), db: 
         .filter(UserModel.id == current_user.id)
         .first()
     )
-    projects = sorted(user.projects, key=lambda project: (project.created_at or "", project.id), reverse=True)
+    projects = sorted(user.projects, key=project_sort_key, reverse=True)
     applications = sorted(user.applications, key=lambda item: (item.created_at or "", item.id), reverse=True)
     return {
         "user": serialize_user(user, include_email=True),
@@ -789,10 +826,12 @@ def get_public_profile(
     if not user:
         raise HTTPException(status_code=404, detail="User not found.")
 
-    projects = sorted(user.projects, key=lambda project: (project.created_at or "", project.id), reverse=True)
+    is_current_user = bool(current_user and current_user.id == user.id)
+    visible_projects = user.projects if is_current_user else [project for project in user.projects if project.status == "active"]
+    projects = sorted(visible_projects, key=project_sort_key, reverse=True)
     return {
-        "user": serialize_user(user, include_email=bool(current_user and current_user.id == user.id)),
-        "is_current_user": bool(current_user and current_user.id == user.id),
+        "user": serialize_user(user, include_email=is_current_user),
+        "is_current_user": is_current_user,
         "project_count": len(projects),
         "projects": [serialize_project(project, current_user=current_user) for project in projects],
     }
@@ -804,6 +843,7 @@ def list_projects(
     tags: Optional[str] = Query(default=None),
     roles: Optional[str] = Query(default=None),
     status_filter: Literal["all", "active", "archived"] = Query(default="active"),
+    sort_order: Literal["newest", "oldest"] = Query(default="newest"),
     owner: Optional[str] = Query(default=None),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=6, ge=1, le=50),
@@ -811,9 +851,7 @@ def list_projects(
     db: Session = Depends(get_db),
 ) -> dict:
     query = db.query(ProjectModel).options(joinedload(ProjectModel.owner), joinedload(ProjectModel.applications))
-
-    if status_filter != "all":
-        query = query.filter(ProjectModel.status == status_filter)
+    query = query.filter(ProjectModel.status == "active")
     if owner:
         query = query.join(ProjectModel.owner).filter(UserModel.username == owner)
     if search:
@@ -831,13 +869,13 @@ def list_projects(
     for role in split_csv(roles):
         query = query.filter(ProjectModel.required_roles.ilike(f"%{role}%"))
 
-    total = query.count()
-    items = (
-        query.order_by(ProjectModel.created_at.desc(), ProjectModel.id.desc())
-        .offset((page - 1) * page_size)
-        .limit(page_size)
-        .all()
-    )
+    all_items = query.all()
+    reverse = sort_order == "newest"
+    sorted_items = sorted(all_items, key=project_sort_key, reverse=reverse)
+    total = len(sorted_items)
+    start = (page - 1) * page_size
+    end = start + page_size
+    items = sorted_items[start:end]
     return {
         "items": [serialize_project(project, current_user=current_user) for project in items],
         "total": total,
@@ -895,6 +933,8 @@ def get_project(
         .first()
     )
     if not project:
+        raise HTTPException(status_code=404, detail="Project not found.")
+    if not can_view_project(project, current_user):
         raise HTTPException(status_code=404, detail="Project not found.")
 
     applications = []

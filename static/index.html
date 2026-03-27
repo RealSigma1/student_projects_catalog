@@ -73,11 +73,10 @@
                     <input class="control" id="filterRoles" type="text" placeholder="backend, analyst">
                 </div>
                 <div class="field">
-                    <label for="statusFilter">Статус</label>
-                    <select class="control-select" id="statusFilter">
-                        <option value="active">Только активные</option>
-                        <option value="all">Все</option>
-                        <option value="archived">Только архив</option>
+                    <label for="sortOrder">Сортировка</label>
+                    <select class="control-select" id="sortOrder">
+                        <option value="newest">Сначала новые</option>
+                        <option value="oldest">Сначала старые</option>
                     </select>
                 </div>
             </form>
@@ -110,12 +109,18 @@
         return Number.isNaN(date.getTime()) ? value : date.toLocaleString("ru-RU");
     }
 
+    function parseDateForSort(value) {
+        if (!value) return 0;
+        const timestamp = Date.parse(value);
+        return Number.isNaN(timestamp) ? 0 : timestamp;
+    }
+
     function activeFiltersCount() {
         const values = [
             document.getElementById("search").value.trim(),
             document.getElementById("filterTags").value.trim(),
             document.getElementById("filterRoles").value.trim(),
-            document.getElementById("statusFilter").value !== "active" ? document.getElementById("statusFilter").value : ""
+            document.getElementById("sortOrder").value !== "newest" ? document.getElementById("sortOrder").value : ""
         ];
         return values.filter(Boolean).length;
     }
@@ -162,12 +167,23 @@
             search: document.getElementById("search").value.trim(),
             tags: document.getElementById("filterTags").value.trim(),
             roles: document.getElementById("filterRoles").value.trim(),
-            status_filter: document.getElementById("statusFilter").value
+            status_filter: "active",
+            sort_order: document.getElementById("sortOrder").value
         });
 
         const response = await fetch(`${API}/api/projects?${params.toString()}`);
         const data = await response.json();
         const grid = document.getElementById("projectsGrid");
+        const selectedSortOrder = document.getElementById("sortOrder").value;
+
+        data.items = (data.items || []).sort((left, right) => {
+            const leftTime = parseDateForSort(left.created_at);
+            const rightTime = parseDateForSort(right.created_at);
+            if (leftTime !== rightTime) {
+                return selectedSortOrder === "oldest" ? leftTime - rightTime : rightTime - leftTime;
+            }
+            return selectedSortOrder === "oldest" ? left.id - right.id : right.id - left.id;
+        });
 
         totalPages = data.pages || 1;
         document.getElementById("catalogMeta").textContent = `Найдено проектов: ${data.total}. Используй фильтры, чтобы быстрее находить нужные команды.`;
