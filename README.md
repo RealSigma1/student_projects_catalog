@@ -29,7 +29,7 @@
 ## Структура проекта
 
 ```text
-temp_stud_proj/
+stud_proj/
 ├── app/
 │   ├── auth.py
 │   ├── config.py
@@ -67,14 +67,14 @@ temp_stud_proj/
 
 ## Архитектура
 
-- [main.py](C:\Users\Admin\Desktop\temp_stud_proj\main.py) содержит только точку входа и экспорт `app`.
-- [app/__init__.py](C:\Users\Admin\Desktop\temp_stud_proj\app\__init__.py) собирает приложение, подключает роутеры и статику.
-- [app/config.py](C:\Users\Admin\Desktop\temp_stud_proj\app\config.py) хранит конфигурацию и переменные окружения.
-- [app/database.py](C:\Users\Admin\Desktop\temp_stud_proj\app\database.py) отвечает за подключение к БД и инициализацию схемы.
-- [app/models.py](C:\Users\Admin\Desktop\temp_stud_proj\app\models.py) содержит модели `User`, `Project`, `Application`, `Notification`.
-- [app/schemas.py](C:\Users\Admin\Desktop\temp_stud_proj\app\schemas.py) содержит схемы валидации запросов.
-- [app/auth.py](C:\Users\Admin\Desktop\temp_stud_proj\app\auth.py) реализует `OAuth2 Password Bearer`, JWT и зависимости авторизации.
-- [app/routers](C:\Users\Admin\Desktop\temp_stud_proj\app\routers) разделяет API и page routes по областям ответственности.
+- main.py содержит только точку входа и экспорт `app`.
+- app/__init__.py собирает приложение, подключает роутеры и статику.
+- app/config.py хранит конфигурацию и переменные окружения.
+- app/database.py отвечает за подключение к БД и инициализацию схемы.
+- app/models.py содержит модели `User`, `Project`, `Application`, `Notification`.
+- app/schemas.py содержит схемы валидации запросов.
+- app/auth.py реализует `OAuth2 Password Bearer`, JWT и зависимости авторизации.
+- app/routers разделяет API и page routes по областям ответственности.
 
 ## Основные сущности
 
@@ -92,7 +92,7 @@ temp_stud_proj/
 ### 1. Создать виртуальное окружение
 
 ```powershell
-cd C:\Users\Admin\Desktop\temp_stud_proj
+cd C:\Users\Admin\Desktop\stud_proj
 python -m venv .venv
 ```
 
@@ -116,7 +116,7 @@ python -m venv .venv
 ## Запуск тестов
 
 ```powershell
-cd C:\Users\Admin\Desktop\temp_stud_proj
+cd C:\Users\Admin\Desktop\stud_proj
 .\.venv\Scripts\python.exe -m pytest -v
 ```
 
@@ -190,14 +190,14 @@ COOKIE_SECURE=false
 
 Интерфейс построен на статических страницах:
 
-- [static/index.html](C:\Users\Admin\Desktop\temp_stud_proj\static\index.html) — каталог проектов
-- [static/create_project.html](C:\Users\Admin\Desktop\temp_stud_proj\static\create_project.html) — создание проекта
-- [static/profile.html](C:\Users\Admin\Desktop\temp_stud_proj\static\profile.html) — профиль пользователя
-- [static/project.html](C:\Users\Admin\Desktop\temp_stud_proj\static\project.html) — карточка проекта
-- [static/login.html](C:\Users\Admin\Desktop\temp_stud_proj\static\login.html) — вход
-- [static/register.html](C:\Users\Admin\Desktop\temp_stud_proj\static\register.html) — регистрация
+- static/index.html — каталог проектов
+- static/create_project.html— создание проекта
+- static/profile.html — профиль пользователя
+- static/project.html — карточка проекта
+- static/login.html — вход
+- static/register.html — регистрация
 
-Bearer token на клиенте хранится в `localStorage` через [static/auth.js](C:\Users\Admin\Desktop\temp_stud_proj\static\auth.js).
+Bearer token на клиенте хранится в `localStorage` через static/auth.js.
 
 
 
