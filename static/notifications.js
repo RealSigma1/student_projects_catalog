@@ -136,7 +136,8 @@
     async function fetchNotifications(state) {
         try {
             const previousUnreadCount = state.unreadCount;
-            const response = await fetch("/api/notifications?limit=12");
+            const request = window.authFetch || window.fetch.bind(window);
+            const response = await request("/api/notifications?limit=12");
             if (response.status === 401) {
                 state.host.style.display = "none";
                 state.disabled = true;
@@ -172,7 +173,8 @@
         }
 
         try {
-            await fetch(`/api/notifications/${notificationId}/read`, { method: "POST" });
+            const request = window.authFetch || window.fetch.bind(window);
+            await request(`/api/notifications/${notificationId}/read`, { method: "POST" });
         } catch (error) {
             return;
         }

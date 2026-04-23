@@ -97,6 +97,7 @@
     </section>
 </main>
 
+<script src="/static/auth.js"></script>
 <script src="/static/notifications.js"></script>
 <script>
     const API = window.location.origin;
@@ -151,7 +152,7 @@
     }
 
     async function loadCurrentUser() {
-        const response = await fetch(`${API}/api/me`);
+        const response = await window.authFetch(`${API}/api/me`);
         if (!response.ok) {
             window.location.href = "/login";
             return;
@@ -209,7 +210,10 @@
     }
 
     async function logout() {
-        await fetch(`${API}/api/auth/logout`, { method: "POST" });
+        await window.authFetch(`${API}/api/auth/logout`, { method: "POST" });
+        if (window.clearAccessToken) {
+            window.clearAccessToken();
+        }
         window.location.href = "/login";
     }
 
