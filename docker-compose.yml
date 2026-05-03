@@ -25,4 +25,3 @@ services:
       - "80:80"
     volumes:
       - ./deploy/docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-
