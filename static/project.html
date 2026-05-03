@@ -1,137 +1,188 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Проект</title>
+    <title>Проект — StudCollab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/theme.css">
 </head>
 <body>
-<header class="topbar">
-    <div class="topbar-row">
-        <div class="brand-lockup">
-            <div class="brand-mark">SP</div>
-            <div class="brand-copy">
-                <strong>Project View</strong>
-                <span>Карточка проекта, отклики и управление заявками</span>
+
+<header class="topbar meridian-topbar">
+    <div class="topbar-row meridian-topbar-row">
+        <div class="meridian-brand">
+            <div class="meridian-brand-mark">
+                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect x="1" y="1" width="5" height="5" rx="1" fill="white"/>
+                    <rect x="8" y="1" width="5" height="5" rx="1" fill="white" opacity=".55"/>
+                    <rect x="1" y="8" width="5" height="5" rx="1" fill="white" opacity=".55"/>
+                    <rect x="8" y="8" width="5" height="5" rx="1" fill="white" opacity=".28"/>
+                </svg>
+            </div>
+            <div class="meridian-brand-copy">
+                <strong>StudCollab</strong>
+                <span>Карточка проекта, отклики и управление</span>
             </div>
         </div>
-        <div class="topbar-actions">
-            <a class="button-link" href="/">Каталог</a>
+
+        <div class="meridian-topbar-actions">
             <div id="notificationsHost"></div>
-            <a class="button-link" id="authorLink" href="/profile/me">Профиль автора</a>
+            <a class="meridian-btn meridian-btn-ghost" href="/">Каталог</a>
+            <a class="meridian-btn meridian-btn-ghost" id="authorLink" href="/profile/me">Профиль автора</a>
         </div>
     </div>
 </header>
 
-<main class="app-shell">
-    <section class="hero fade-up">
-        <div class="hero-card">
-            <div class="eyebrow">Project</div>
-            <h1 class="hero-title" id="title">Загрузка проекта...</h1>
-            <p class="hero-text" id="description">Собираем детали карточки, роли и ссылки.</p>
-            <div class="chip-row" id="chips" style="margin-top: 18px;"></div>
-            <div class="hero-metrics" id="meta">
-                <div class="metric">
-                    <strong>...</strong>
-                    <span>обновляем данные</span>
-                </div>
+<main class="meridian-shell meridian-page">
+
+    <!-- Hero: карточка проекта -->
+    <section class="meridian-page-header fade-up">
+        <div class="meridian-section-label">Проект</div>
+        <h1 class="meridian-page-title" id="title">Загрузка проекта…</h1>
+        <p class="meridian-page-subtitle" id="description">Загружаем описание проекта, роли и ссылки.</p>
+        <div class="meridian-chip-row" id="chips" style="margin-top: 16px;"></div>
+
+        <div class="meridian-hero-metrics" id="meta" style="margin-top: 32px;">
+            <div class="meridian-hero-metric">
+                <span class="meridian-hero-metric-value">…</span>
+                <span class="meridian-hero-metric-label">обновляем данные</span>
             </div>
         </div>
     </section>
 
-    <section class="split-panel">
-        <section class="stack">
-            <section class="section-card fade-up">
-                <h2>Материалы проекта</h2>
-                <p class="section-subtitle">
-                    GitHub, demo и контакты автора. Если чего-то нет, значит автор ещё не добавил эти данные.
-                </p>
-                <div class="detail-list" id="linksBlock"></div>
+    <!-- Основная сетка -->
+    <div class="meridian-page-grid">
+
+        <!-- Основной контент -->
+        <section class="meridian-content-col">
+
+            <!-- Материалы -->
+            <section class="meridian-panel fade-up">
+                <div class="meridian-panel-head">
+                    <div>
+                        <div class="meridian-content-title">Материалы проекта</div>
+                        <div class="meridian-content-sub">GitHub, демо и контакты автора.</div>
+                    </div>
+                </div>
+                <div class="meridian-list" id="linksBlock"></div>
             </section>
 
-            <section class="section-card fade-up" id="applyBlock" style="display:none;">
-                <h2>Откликнуться на проект</h2>
-                <p class="section-subtitle">
-                    Один пользователь может отправить только один отклик. Кратко опиши свой опыт и полезную роль в команде.
-                </p>
-                <form id="applyForm">
-                    <div class="field">
-                        <label for="message">Сообщение</label>
-                        <textarea class="control-area" id="message" placeholder="Кто вы, какой у вас опыт и почему хотите присоединиться."></textarea>
+            <!-- Форма отклика -->
+            <section class="meridian-panel fade-up" id="applyBlock" style="display:none;">
+                <div class="meridian-panel-head">
+                    <div>
+                        <div class="meridian-content-title">Откликнуться на проект</div>
+                        <div class="meridian-content-sub">Один пользователь может отправить только один отклик. Кратко опиши свой опыт и полезную роль в команде.</div>
                     </div>
-                    <div class="button-row">
-                        <button class="button button-primary" type="submit">Отправить отклик</button>
+                </div>
+                <form id="applyForm" class="meridian-form-grid">
+                    <div class="meridian-field-group meridian-field-span-2">
+                        <label class="meridian-field-label" for="message">Сообщение</label>
+                        <textarea class="meridian-field-textarea" id="message" placeholder="Кто вы, какой у вас опыт и почему хотите присоединиться."></textarea>
                     </div>
-                    <div class="message" id="applyMessage"></div>
+                    <div class="meridian-section-actions meridian-field-span-2">
+                        <button class="meridian-btn meridian-btn-solid meridian-btn-lg" type="submit">Отправить отклик</button>
+                    </div>
+                    <div class="message meridian-field-span-2" id="applyMessage"></div>
                 </form>
             </section>
 
-            <section class="section-card fade-up" id="myApplicationBlock" style="display:none;">
-                <h2>Мой отклик</h2>
+            <!-- Мой отклик -->
+            <section class="meridian-panel fade-up" id="myApplicationBlock" style="display:none;">
+                <div class="meridian-panel-head">
+                    <div class="meridian-content-title">Мой отклик</div>
+                </div>
                 <div id="myApplicationCard"></div>
             </section>
 
-            <section class="section-card fade-up" id="ownerApplicationsBlock" style="display:none;">
-                <h2>Отклики на проект</h2>
-                <p class="section-subtitle">
-                    Просмотр и изменение статусов доступны только владельцу проекта.
-                </p>
-                <div class="stack" id="applicationsList"></div>
+            <!-- Отклики (для владельца) -->
+            <section class="meridian-panel fade-up" id="ownerApplicationsBlock" style="display:none;">
+                <div class="meridian-panel-head">
+                    <div>
+                        <div class="meridian-content-title">Отклики на проект</div>
+                        <div class="meridian-content-sub">Просмотр и изменение статусов доступны только владельцу проекта.</div>
+                    </div>
+                </div>
+                <div class="meridian-list" id="applicationsList"></div>
             </section>
         </section>
 
-        <aside class="stack" id="ownerPanel" style="display:none;">
-            <section class="section-card fade-up">
-                <h2>Управление проектом</h2>
-                <p class="section-subtitle">
-                    Обнови описание, роли, ссылки или переведи карточку в архивный статус.
-                </p>
-                <form id="editForm">
-                    <div class="field">
-                        <label for="editTitle">Название</label>
-                        <input class="control" id="editTitle" type="text">
+        <!-- Боковая панель: управление проектом (только для владельца) -->
+        <aside id="ownerPanel" style="display:none;">
+            <section class="meridian-panel fade-up">
+                <div class="meridian-panel-head">
+                    <div>
+                        <div class="meridian-content-title">Управление проектом</div>
+                        <div class="meridian-content-sub">Обнови описание, роли, ссылки или переведи карточку в архивный статус.</div>
                     </div>
-                    <div class="field">
-                        <label for="editDescription">Описание</label>
-                        <textarea class="control-area" id="editDescription"></textarea>
+                </div>
+
+                <form id="editForm" class="meridian-form-grid">
+                    <div class="meridian-field-group meridian-field-span-2">
+                        <label class="meridian-field-label" for="editTitle">Название</label>
+                        <input class="meridian-field-input" id="editTitle" type="text">
                     </div>
-                    <div class="field">
-                        <label for="editTags">Теги</label>
-                        <input class="control" id="editTags" type="text">
+
+                    <div class="meridian-field-group meridian-field-span-2">
+                        <label class="meridian-field-label" for="editDescription">Описание</label>
+                        <textarea class="meridian-field-textarea" id="editDescription"></textarea>
                     </div>
-                    <div class="field">
-                        <label for="editRoles">Требуемые роли</label>
-                        <input class="control" id="editRoles" type="text">
+
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="editTags">Теги</label>
+                        <input class="meridian-field-input" id="editTags" type="text">
                     </div>
-                    <div class="field">
-                        <label for="editGithub">GitHub</label>
-                        <input class="control" id="editGithub" type="text">
+
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="editRoles">Требуемые роли</label>
+                        <input class="meridian-field-input" id="editRoles" type="text">
                     </div>
-                    <div class="field">
-                        <label for="editDemo">Demo</label>
-                        <input class="control" id="editDemo" type="text">
+
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="editGithub">GitHub</label>
+                        <input class="meridian-field-input" id="editGithub" type="text">
                     </div>
-                    <div class="field">
-                        <label for="editContact">Контакты</label>
-                        <textarea class="control-area" id="editContact"></textarea>
+
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="editDemo">Demo</label>
+                        <input class="meridian-field-input" id="editDemo" type="text">
                     </div>
-                    <div class="field">
-                        <label for="editStatus">Статус</label>
-                        <select class="control-select" id="editStatus">
-                            <option value="active">active</option>
-                            <option value="archived">archived</option>
+
+                    <div class="meridian-field-group meridian-field-span-2">
+                        <label class="meridian-field-label" for="editContact">Контакты</label>
+                        <textarea class="meridian-field-textarea" id="editContact"></textarea>
+                    </div>
+
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="editStatus">Статус</label>
+                        <select class="meridian-field-select" id="editStatus">
+                            <option value="active">Активен</option>
+                            <option value="archived">Архив</option>
                         </select>
                     </div>
-                    <div class="button-row">
-                        <button class="button button-primary" type="submit">Сохранить изменения</button>
-                        <button class="button button-warning" type="button" id="deleteBtn">Удалить проект</button>
+
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="editApplicationsOpen">Набор в команду</label>
+                        <select class="meridian-field-select" id="editApplicationsOpen">
+                            <option value="true">Открыт</option>
+                            <option value="false">Закрыт</option>
+                        </select>
                     </div>
-                    <div class="message" id="editMessage"></div>
+
+                    <div class="meridian-section-actions meridian-field-span-2">
+                        <button class="meridian-btn meridian-btn-solid" type="submit">Сохранить изменения</button>
+                        <button class="meridian-btn meridian-btn-danger" type="button" id="deleteBtn">Удалить проект</button>
+                    </div>
+
+                    <div class="message meridian-field-span-2" id="editMessage"></div>
                 </form>
             </section>
         </aside>
-    </section>
+    </div>
+
 </main>
 
 <script src="/static/auth.js"></script>
@@ -141,7 +192,11 @@
     const projectId = window.location.pathname.split("/").pop();
 
     function csv(value) {
-        return value.join(", ");
+        return (value || []).join(", ");
+    }
+
+    function parseCSV(value) {
+        return value.split(",").map(item => item.trim()).filter(Boolean);
     }
 
     function formatDate(value) {
@@ -150,72 +205,192 @@
         return Number.isNaN(date.getTime()) ? value : date.toLocaleString("ru-RU");
     }
 
+    function pluralize(value, forms) {
+        const mod10 = value % 10;
+        const mod100 = value % 100;
+        if (mod10 === 1 && mod100 !== 11) return forms[0];
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return forms[1];
+        return forms[2];
+    }
+
+    function formatRelativeDate(value) {
+        if (!value) return "дата не указана";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        if (diffMs < 0) return formatDate(value);
+
+        const minute = 60 * 1000;
+        const hour = 60 * minute;
+        const day = 24 * hour;
+        const month = 30 * day;
+        const year = 365 * day;
+
+        if (diffMs < minute) return "только что";
+
+        const minutes = Math.floor(diffMs / minute);
+        if (minutes < 60) {
+            return `${minutes} ${pluralize(minutes, ["минуту", "минуты", "минут"])} назад`;
+        }
+
+        const hours = Math.floor(diffMs / hour);
+        if (hours < 24) {
+            return `${hours} ${pluralize(hours, ["час", "часа", "часов"])} назад`;
+        }
+
+        const days = Math.floor(diffMs / day);
+        if (days < 30) {
+            return `${days} ${pluralize(days, ["день", "дня", "дней"])} назад`;
+        }
+
+        const months = Math.floor(diffMs / month);
+        if (months < 12) {
+            return `${months} ${pluralize(months, ["месяц", "месяца", "месяцев"])} назад`;
+        }
+
+        const years = Math.floor(diffMs / year);
+        return `${years} ${pluralize(years, ["год", "года", "лет"])} назад`;
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
     function applicationCard(item) {
         const profileUrl = `/profile/${item.applicant_username}`;
-        const actions = item.status === "new"
-            ? `
-                <div class="button-row">
-                    <button class="button button-secondary" type="button" onclick="setApplicationStatus(${item.id}, 'accepted')">Принять</button>
-                    <button class="button button-warning" type="button" onclick="setApplicationStatus(${item.id}, 'rejected')">Отклонить</button>
+        const statusMap = { accepted: "meridian-pill-green", rejected: "meridian-pill-red", new: "meridian-pill-amber", removed: "meridian-pill-gray" };
+        const statusLabel = { accepted: "Принят", rejected: "Отклонён", new: "Новый", removed: "Убран" };
+        const pillCls = statusMap[item.status] || "meridian-pill-gray";
+        const label = statusLabel[item.status] || item.status;
+
+        const roles = (item.applicant_roles || [])
+            .map(r => `<span class="meridian-chip meridian-chip-role">${escapeHtml(r)}</span>`)
+            .join("");
+        const assignedRole = item.assigned_role
+            ? `<span class="meridian-chip meridian-chip-gold">Роль в проекте: ${escapeHtml(item.assigned_role)}</span>`
+            : "";
+        const requestedRole = item.requested_role
+            ? `<span class="meridian-chip meridian-chip-muted">Запрос роли: ${escapeHtml(item.requested_role)}</span>`
+            : "";
+
+        let actions = `<div class="meridian-muted text-sm" style="margin-top: 8px;">Решение зафиксировано. Повторно изменить статус нельзя.</div>`;
+        if (item.status === "new") {
+            actions = `<div class="meridian-section-actions">
+                   <button class="meridian-btn meridian-btn-solid" type="button" onclick="setApplicationStatus(${item.id}, 'accepted')">Принять</button>
+                   <button class="meridian-btn meridian-btn-danger" type="button" onclick="setApplicationStatus(${item.id}, 'rejected')">Отклонить</button>
+               </div>`;
+        } else if (item.status === "accepted") {
+            const roleRequestActions = item.requested_role
+                ? `
+                    <div class="meridian-form-grid" style="margin-top: 10px;">
+                        <div class="meridian-field-group meridian-field-span-2">
+                            <label class="meridian-field-label" for="approveRole-${item.id}">Роль после утверждения</label>
+                            <input class="meridian-field-input" id="approveRole-${item.id}" type="text" value="" maxlength="40" placeholder="Например: frontend">
+                        </div>
+                        <div class="meridian-section-actions meridian-field-span-2">
+                            <button class="meridian-btn meridian-btn-solid" type="button" onclick="resolveRoleRequest(${item.id}, 'approved')">Утвердить роль</button>
+                            <button class="meridian-btn meridian-btn-ghost" type="button" onclick="resolveRoleRequest(${item.id}, 'rejected')">Отклонить запрос</button>
+                        </div>
+                    </div>
+                `
+                : "";
+            actions = `
+                ${roleRequestActions}
+                <div class="meridian-section-actions" style="margin-top: 10px;">
+                    <button class="meridian-btn meridian-btn-ghost" type="button" onclick="removeTeamMember(${item.id})">Убрать из команды</button>
                 </div>
-            `
-            : `<div class="card-meta">Решение зафиксировано. Повторно изменить статус нельзя.</div>`;
+            `;
+        }
 
         return `
-            <article class="application-card fade-up">
-                <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <h3><a href="${profileUrl}" style="text-decoration: none;">${item.applicant_full_name || item.applicant_username}</a></h3>
-                    <span class="status-pill status-${item.status}">${item.status}</span>
+            <article class="meridian-application-card">
+                <div class="meridian-application-head">
+                    <div>
+                        <strong><a href="${profileUrl}" style="text-decoration:none;">${escapeHtml(item.applicant_full_name || item.applicant_username)}</a></strong>
+                        <span>@${escapeHtml(item.applicant_username)}</span>
+                    </div>
+                    <span class="meridian-pill ${pillCls}">${label}</span>
                 </div>
-                <p>${item.message}</p>
-                <div class="chip-row" style="margin: 12px 0;">
-                    ${(item.applicant_roles || []).map(role => `<span class="chip chip-role">${role}</span>`).join("")}
-                    <a class="chip chip-muted" href="${profileUrl}" style="text-decoration: none;">@${item.applicant_username}</a>
-                    <a class="button-link" href="${profileUrl}">Открыть профиль</a>
+                <p>${escapeHtml(item.message)}</p>
+                <div class="meridian-chip-row" style="margin: 10px 0;">
+                    ${roles}
+                    ${assignedRole}
+                    ${requestedRole}
+                    <a class="meridian-chip meridian-chip-muted" href="${profileUrl}">@${escapeHtml(item.applicant_username)}</a>
                 </div>
-                <div class="card-meta">Отправлен: ${formatDate(item.created_at)}</div>
+                <div class="meridian-application-meta">
+                    <span>${formatDate(item.created_at)}</span>
+                </div>
                 ${actions}
             </article>
         `;
     }
 
-    function parseCSV(value) {
-        return value.split(",").map(item => item.trim()).filter(Boolean);
-    }
-
     function fillProjectView(project) {
+        document.title = `${project.title} — StudCollab`;
         document.getElementById("title").textContent = project.title;
         document.getElementById("description").textContent = project.description;
-        document.getElementById("authorLink").href = `/profile/${project.owner_username}`;
-        document.getElementById("authorLink").textContent = project.owner_full_name || project.owner_username;
 
-        const chips = [
-            ...project.tags.map(tag => `<span class="chip">${tag}</span>`),
-            ...project.required_roles.map(role => `<span class="chip chip-role">${role}</span>`),
-            `<span class="status-pill ${project.status === "active" ? "status-active" : "status-archived"}">${project.status}</span>`
-        ];
-        document.getElementById("chips").innerHTML = chips.join("");
+        const authorUsername = project.owner_username || "me";
+        document.getElementById("authorLink").href = `/profile/${authorUsername}`;
+        document.getElementById("authorLink").textContent = `Профиль: ${project.owner_full_name || authorUsername}`;
+
+        const tags = (project.tags || []).map(t => `<span class="meridian-chip meridian-chip-gold">${escapeHtml(t)}</span>`).join("");
+        const roles = (project.required_roles || []).map(r => `<span class="meridian-chip">${escapeHtml(r)}</span>`).join("");
+        const recruitmentChip = project.applications_open
+            ? `<span class="meridian-chip meridian-chip-muted">Набор открыт</span>`
+            : `<span class="meridian-chip meridian-chip-muted">Набор закрыт</span>`;
+        document.getElementById("chips").innerHTML = tags + roles + recruitmentChip;
+
         document.getElementById("meta").innerHTML = `
-            <div class="metric">
-                <strong>${project.owner_full_name || project.owner_username}</strong>
-                <span>автор проекта</span>
+            <div class="meridian-hero-metric">
+                <span class="meridian-hero-metric-value">${escapeHtml(project.owner_full_name || project.owner_username || "—")}</span>
+                <span class="meridian-hero-metric-label">автор проекта</span>
             </div>
-            <div class="metric">
-                <strong>${project.applications_count}</strong>
-                <span>откликов сейчас</span>
+            <div class="meridian-hero-metric">
+                <span class="meridian-hero-metric-value">${project.applications_count}</span>
+                <span class="meridian-hero-metric-label">откликов сейчас</span>
             </div>
-            <div class="metric">
-                <strong>${formatDate(project.created_at)}</strong>
-                <span>дата публикации</span>
+            <div class="meridian-hero-metric">
+                <span class="meridian-hero-metric-value">${formatRelativeDate(project.created_at)}</span>
+                <span class="meridian-hero-metric-label">дата публикации</span>
             </div>
         `;
 
         const links = [];
-        if (project.github_url) links.push(`<article class="info-card fade-up"><h3>GitHub</h3><p><a href="${project.github_url}" target="_blank">${project.github_url}</a></p></article>`);
-        if (project.demo_url) links.push(`<article class="info-card fade-up"><h3>Demo</h3><p><a href="${project.demo_url}" target="_blank">${project.demo_url}</a></p></article>`);
-        if (project.contact_info) links.push(`<article class="info-card fade-up"><h3>Контакты</h3><p>${project.contact_info}</p></article>`);
+        if (project.github_url) {
+            links.push(`
+                <article class="meridian-note-card">
+                    <strong>GitHub</strong>
+                    <p><a href="${escapeHtml(project.github_url)}" target="_blank">${escapeHtml(project.github_url)}</a></p>
+                </article>
+            `);
+        }
+        if (project.demo_url) {
+            links.push(`
+                <article class="meridian-note-card">
+                    <strong>Demo</strong>
+                    <p><a href="${escapeHtml(project.demo_url)}" target="_blank">${escapeHtml(project.demo_url)}</a></p>
+                </article>
+            `);
+        }
+        if (project.contact_info) {
+            links.push(`
+                <article class="meridian-note-card">
+                    <strong>Контакты</strong>
+                    <p>${escapeHtml(project.contact_info)}</p>
+                </article>
+            `);
+        }
         if (!links.length) {
-            links.push(`<article class="empty-card fade-up"><h3>Дополнительных материалов пока нет</h3><p>Автор ещё не добавил GitHub, demo или контакты.</p></article>`);
+            links.push(`<div class="meridian-empty-card">Пока не указаны GitHub, demo или контакты.</div>`);
         }
         document.getElementById("linksBlock").innerHTML = links.join("");
     }
@@ -223,6 +398,7 @@
     async function loadProject() {
         const response = await window.authFetch(`${API}/api/projects/${projectId}`);
         const data = await response.json();
+
         if (!response.ok) {
             document.getElementById("title").textContent = "Проект не найден";
             document.getElementById("description").textContent = data.detail || "Не удалось загрузить проект.";
@@ -233,28 +409,67 @@
 
         if (data.project.can_apply) {
             document.getElementById("applyBlock").style.display = "block";
+        } else {
+            document.getElementById("applyBlock").style.display = "none";
         }
 
         if (data.current_user_application) {
+            const app = data.current_user_application;
+            const statusMap = { accepted: "meridian-pill-green", rejected: "meridian-pill-red", new: "meridian-pill-amber", removed: "meridian-pill-gray" };
+            const statusLabel = { accepted: "Принят", rejected: "Отклонён", new: "Новый", removed: "Убран" };
             document.getElementById("myApplicationBlock").style.display = "block";
             document.getElementById("myApplicationCard").innerHTML = `
-                <article class="application-card fade-up">
-                    <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                        <h3>Ваш отклик</h3>
-                        <span class="status-pill status-${data.current_user_application.status}">${data.current_user_application.status}</span>
+                <article class="meridian-application-card">
+                    <div class="meridian-application-head">
+                        <strong>Ваш отклик</strong>
+                        <span class="meridian-pill ${statusMap[app.status] || "meridian-pill-gray"}">${statusLabel[app.status] || app.status}</span>
                     </div>
-                    <p>${data.current_user_application.message}</p>
-                    <div class="card-meta">Отправлен: ${formatDate(data.current_user_application.created_at)}</div>
+                    <p>${escapeHtml(app.message)}</p>
+                    <div class="meridian-chip-row" style="margin: 10px 0;">
+                        ${app.assigned_role ? `<span class="meridian-chip meridian-chip-gold">Роль в проекте: ${escapeHtml(app.assigned_role)}</span>` : ""}
+                        ${app.requested_role ? `<span class="meridian-chip meridian-chip-muted">Запрошена роль: ${escapeHtml(app.requested_role)}</span>` : ""}
+                    </div>
+                    <div class="meridian-application-meta">
+                        <span>Отправлен: ${formatDate(app.created_at)}</span>
+                    </div>
+                    ${
+                        app.status === "accepted"
+                            ? (
+                                app.requested_role
+                                    ? `<div class="meridian-muted text-sm" style="margin-top: 10px;">Запрос на новую роль отправлен владельцу проекта и ждёт подтверждения.</div>`
+                                    : `
+                                        <form id="roleRequestForm" class="meridian-form-grid" style="margin-top: 14px;">
+                                            <div class="meridian-field-group meridian-field-span-2">
+                                                <label class="meridian-field-label" for="requestedRole">Хочешь изменить роль?</label>
+                                                <input class="meridian-field-input" id="requestedRole" type="text" maxlength="40" placeholder="Напиши только роль: frontend, backend, designer">
+                                            </div>
+                                            <div class="meridian-section-actions meridian-field-span-2">
+                                                <button class="meridian-btn meridian-btn-ghost" type="submit">Отправить владельцу</button>
+                                            </div>
+                                            <div class="message meridian-field-span-2" id="roleRequestMessage"></div>
+                                        </form>
+                                    `
+                            )
+                            : ""
+                    }
                 </article>
             `;
+
+            const roleRequestForm = document.getElementById("roleRequestForm");
+            if (roleRequestForm) {
+                roleRequestForm.addEventListener("submit", async (event) => {
+                    event.preventDefault();
+                    await submitRoleRequest(app.id);
+                });
+            }
         }
 
         if (data.project.is_owner) {
-            document.getElementById("ownerPanel").style.display = "grid";
+            document.getElementById("ownerPanel").style.display = "block";
             document.getElementById("ownerApplicationsBlock").style.display = "block";
             document.getElementById("applicationsList").innerHTML = data.applications.length
                 ? data.applications.map(applicationCard).join("")
-                : `<article class="empty-card fade-up"><h3>Пока нет откликов</h3><p>Когда кто-то откликнется на проект, заявки появятся здесь.</p></article>`;
+                : `<div class="meridian-empty-card">Пока нет откликов. Когда кто-то откликнется, заявки появятся здесь.</div>`;
 
             document.getElementById("editTitle").value = data.project.title;
             document.getElementById("editDescription").value = data.project.description;
@@ -264,6 +479,7 @@
             document.getElementById("editDemo").value = data.project.demo_url || "";
             document.getElementById("editContact").value = data.project.contact_info || "";
             document.getElementById("editStatus").value = data.project.status;
+            document.getElementById("editApplicationsOpen").value = String(Boolean(data.project.applications_open));
         }
     }
 
@@ -271,15 +487,29 @@
         const confirmMessage = status === "accepted"
             ? "Вы точно хотите принять эту заявку?"
             : "Вы точно хотите отклонить эту заявку?";
+        if (!window.confirm(confirmMessage)) return;
 
-        if (!window.confirm(confirmMessage)) {
-            return;
+        const payload = { status };
+        if (status === "accepted") {
+            const card = document.querySelector(`button[onclick="setApplicationStatus(${applicationId}, 'accepted')"]`)?.closest(".meridian-application-card");
+            const applicantRoles = Array.from(card?.querySelectorAll(".meridian-chip-role") || [])
+                .map((node) => node.textContent.trim())
+                .filter(Boolean);
+            const suggestedRole = applicantRoles[0] || "";
+            const enteredRole = window.prompt(
+                "Укажи роль этого участника в проекте. Если в профиле роли нет, это поле обязательно.",
+                suggestedRole
+            );
+            if (enteredRole === null) return;
+            if (enteredRole.trim()) {
+                payload.assigned_role = enteredRole.trim();
+            }
         }
 
         const response = await window.authFetch(`${API}/api/applications/${applicationId}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status })
+            body: JSON.stringify(payload)
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) {
@@ -289,6 +519,73 @@
         loadProject();
     }
     window.setApplicationStatus = setApplicationStatus;
+
+    async function removeTeamMember(applicationId) {
+        if (!window.confirm("Убрать этого участника из команды?")) return;
+
+        const response = await window.authFetch(`${API}/api/applications/${applicationId}/remove`, {
+            method: "POST"
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            window.alert(data.detail || "Не удалось убрать участника из команды.");
+            return;
+        }
+        loadProject();
+    }
+    window.removeTeamMember = removeTeamMember;
+
+    async function submitRoleRequest(applicationId) {
+        const input = document.getElementById("requestedRole");
+        const messageBox = document.getElementById("roleRequestMessage");
+        const requestedRole = input?.value.trim() || "";
+
+        messageBox.textContent = "";
+        messageBox.className = "message";
+
+        const response = await window.authFetch(`${API}/api/applications/${applicationId}/role-request`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ requested_role: requestedRole })
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            messageBox.textContent = data.detail || "Не удалось отправить запрос на роль.";
+            messageBox.classList.add("message-error");
+            return;
+        }
+
+        messageBox.textContent = "Запрос на смену роли отправлен владельцу проекта.";
+        messageBox.classList.add("message-success");
+        loadProject();
+    }
+    window.submitRoleRequest = submitRoleRequest;
+
+    async function resolveRoleRequest(applicationId, decision) {
+        const approved = decision === "approved";
+        if (!window.confirm(approved ? "Утвердить новую роль участника?" : "Отклонить запрос на новую роль?")) return;
+
+        const payload = { decision };
+        if (approved) {
+            const approvedRoleInput = document.getElementById(`approveRole-${applicationId}`);
+            const approvedRole = approvedRoleInput?.value.trim() || "";
+            payload.assigned_role = approvedRole;
+        }
+
+        const response = await window.authFetch(`${API}/api/applications/${applicationId}/role-request`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            window.alert(data.detail || "Не удалось обработать запрос на роль.");
+            return;
+        }
+        loadProject();
+    }
+    window.resolveRoleRequest = resolveRoleRequest;
 
     document.getElementById("applyForm").addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -329,7 +626,8 @@
             github_url: document.getElementById("editGithub").value.trim(),
             demo_url: document.getElementById("editDemo").value.trim(),
             contact_info: document.getElementById("editContact").value.trim(),
-            status: document.getElementById("editStatus").value
+            status: document.getElementById("editStatus").value,
+            applications_open: document.getElementById("editApplicationsOpen").value === "true"
         };
 
         const response = await window.authFetch(`${API}/api/projects/${projectId}`, {
@@ -353,9 +651,7 @@
     document.getElementById("deleteBtn").addEventListener("click", async () => {
         if (!window.confirm("Удалить проект? Это действие необратимо.")) return;
         const response = await window.authFetch(`${API}/api/projects/${projectId}`, { method: "DELETE" });
-        if (response.ok) {
-            window.location.href = "/";
-        }
+        if (response.ok) window.location.href = "/";
     });
 
     window.addEventListener("load", () => {

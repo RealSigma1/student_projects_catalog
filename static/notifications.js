@@ -146,7 +146,7 @@
 
             const data = await response.json().catch(() => ({}));
             if (!response.ok) {
-                throw new Error(data.detail || "Failed to load notifications.");
+                throw new Error(data.detail || "Не удалось загрузить уведомления.");
             }
 
             state.error = "";
@@ -158,7 +158,7 @@
             }
             state.ready = true;
         } catch (error) {
-            state.error = error instanceof Error ? error.message : "Failed to load notifications.";
+            state.error = error instanceof Error ? error.message : "Не удалось загрузить уведомления.";
         }
 
         render(state);

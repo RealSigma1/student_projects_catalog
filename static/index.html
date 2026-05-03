@@ -1,100 +1,280 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог проектов</title>
+    <title>StudCollab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/theme.css">
 </head>
 <body>
-<header class="topbar">
-    <div class="topbar-row">
-        <div class="brand-lockup">
-            <div class="brand-mark">SP</div>
-            <div class="brand-copy">
-                <strong>Student Projects</strong>
-                <span>Каталог студенческих инициатив, команд и ролей</span>
+<header class="topbar meridian-topbar">
+    <div class="topbar-row meridian-topbar-row">
+        <div class="meridian-brand">
+            <div class="meridian-brand-mark">
+                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect x="1" y="1" width="5" height="5" rx="1" fill="white"/>
+                    <rect x="8" y="1" width="5" height="5" rx="1" fill="white" opacity=".55"/>
+                    <rect x="1" y="8" width="5" height="5" rx="1" fill="white" opacity=".55"/>
+                    <rect x="8" y="8" width="5" height="5" rx="1" fill="white" opacity=".28"/>
+                </svg>
+            </div>
+            <div class="meridian-brand-copy">
+                <strong>StudCollab</strong>
+                <span>Совместная платформа студенческих проектов</span>
             </div>
         </div>
-        <div class="topbar-actions">
-            <a class="button-link button-primary" href="/projects/new">Создать проект</a>
+
+        <nav class="meridian-nav" aria-label="Основная навигация">
+            <a class="meridian-nav-link active" href="#overview">Обзор</a>
+            <a class="meridian-nav-link" href="#catalog">Проекты</a>
+            <a class="meridian-nav-link" href="#applications">Заявки</a>
+        </nav>
+
+        <div class="meridian-topbar-actions">
             <div id="notificationsHost"></div>
-            <a class="button-link" id="profileLink" href="/profile/me">Профиль</a>
-            <button class="button" type="button" id="logoutBtn">Выйти</button>
+            <div class="meridian-user-menu" id="userMenu">
+                <button class="meridian-btn meridian-btn-ghost meridian-user-menu-trigger" type="button" id="profileLink" aria-expanded="false">
+                    <span class="meridian-user-menu-trigger-text">Профиль</span>
+                    <span class="meridian-user-menu-trigger-caret" aria-hidden="true"></span>
+                </button>
+                <div class="meridian-user-menu-panel" id="userMenuPanel" aria-hidden="true">
+                    <div class="meridian-user-menu-header">
+                        <div class="meridian-user-menu-avatar" id="userMenuAvatar">?</div>
+                        <div class="meridian-user-menu-info">
+                            <strong id="userMenuName">Профиль</strong>
+                            <span class="meridian-user-menu-role">Участник платформы</span>
+                        </div>
+                    </div>
+                    <div class="meridian-user-menu-divider"></div>
+                    <a class="meridian-user-menu-item" href="/profile/me">
+                        <span class="meridian-user-menu-item-inner">
+                            <svg class="meridian-user-menu-item-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                <circle cx="8" cy="5.5" r="2.5"></circle>
+                                <path d="M2.5 13.5c0-2.761 2.462-5 5.5-5s5.5 2.239 5.5 5"></path>
+                            </svg>
+                            Настройки профиля
+                        </span>
+                        <svg class="meridian-user-menu-item-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <path d="M3 5h4M5 3l2 2-2 2"></path>
+                        </svg>
+                    </a>
+                    <div class="meridian-user-menu-divider"></div>
+                    <button class="meridian-user-menu-item meridian-user-menu-item-danger" type="button" id="logoutBtn">
+                        <span class="meridian-user-menu-item-inner">
+                            <svg class="meridian-user-menu-item-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                <path d="M6 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path>
+                                <path d="M10 11l3-3-3-3M13 8H6"></path>
+                            </svg>
+                            Выйти
+                        </span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </header>
 
-<main class="app-shell">
-    <section class="hero fade-up">
-        <div class="hero-card">
-            <div class="eyebrow">Project Catalog</div>
-            <h1 class="hero-title">Ищи проекты по ролям, стеку и задачам</h1>
-            <p class="hero-text">
-                Смотри активные карточки, фильтруй по тегам и ролям, открывай подробности проекта и переходи к профилям авторов
-            </p>
-            <div class="hero-metrics">
-                <div class="metric">
-                    <strong id="metricProjects">0</strong>
-                    <span>проектов в каталоге</span>
-                </div>
-                <div class="metric">
-                    <strong id="metricPage">1</strong>
-                    <span>текущая страница</span>
-                </div>
-                <div class="metric">
-                    <strong id="metricFilters">0</strong>
-                    <span>активных фильтров</span>
-                </div>
+<main class="meridian-shell">
+    <section class="meridian-hero" id="overview">
+        <div class="meridian-hero-eyebrow">Рабочее пространство команды</div>
+        <h1 class="meridian-hero-title">Проекты. Команды.<br><em>Результат.</em></h1>
+        <p class="meridian-hero-sub">
+            Держи в одном интерфейсе каталог инициатив, входящие отклики, активные роли и собственные проекты.
+        </p>
+        <div class="meridian-hero-actions">
+            <a class="meridian-btn meridian-btn-solid meridian-btn-lg" href="/projects/new">Создать проект</a>
+            <a class="meridian-btn meridian-btn-ghost meridian-btn-lg" href="#catalog">Открыть каталог</a>
+        </div>
+        <div class="meridian-hero-metrics" id="heroMetrics">
+            <div class="meridian-hero-metric">
+                <span class="meridian-hero-metric-value" id="heroMetricProjects">0</span>
+                <span class="meridian-hero-metric-label">Активных проектов</span>
+            </div>
+            <div class="meridian-hero-metric">
+                <span class="meridian-hero-metric-value" id="heroMetricApplications">0</span>
+                <span class="meridian-hero-metric-label">Новых откликов</span>
+            </div>
+            <div class="meridian-hero-metric">
+                <span class="meridian-hero-metric-value" id="heroMetricNotifications">0</span>
+                <span class="meridian-hero-metric-label">Непрочитанных уведомлений</span>
             </div>
         </div>
     </section>
 
-    <section class="catalog-shell">
-        <section class="section-card fade-up">
-            <div class="section-title-row">
+    <div class="meridian-main">
+        <aside class="meridian-sidebar">
+            <div class="meridian-sidebar-section">
+                <div class="meridian-sidebar-label">Навигация</div>
+                <a class="meridian-sidebar-item active" href="#overview">
+                    <span class="meridian-sidebar-dot"></span>
+                    Обзор
+                </a>
+                <a class="meridian-sidebar-item" href="#catalog">
+                    <span class="meridian-sidebar-dot"></span>
+                    Проекты
+                    <span class="meridian-sidebar-count" id="sidebarProjectsCount">0</span>
+                </a>
+                <a class="meridian-sidebar-item" href="#applications">
+                    <span class="meridian-sidebar-dot"></span>
+                    Заявки
+                    <span class="meridian-sidebar-count" id="sidebarApplicationsCount">0</span>
+                </a>
+            </div>
+
+            <div class="meridian-sidebar-section">
+                <div class="meridian-sidebar-label">Команда</div>
+                <div class="meridian-sidebar-team" id="sidebarTeam">
+                    <div class="meridian-sidebar-note">Загрузка состава команды...</div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="meridian-content">
+            <div class="meridian-content-header">
                 <div>
-                    <h2>Каталог проектов</h2>
-                    <p class="section-subtitle" id="catalogMeta">Загрузка списка проектов...</p>
+                    <div class="meridian-content-title">Обзор проектов</div>
+                    <div class="meridian-content-sub" id="overviewSubtitle">Собираем текущее состояние каталога и команд.</div>
+                </div>
+                <div class="meridian-content-actions">
+                    <a class="meridian-btn meridian-btn-solid" href="/projects/new">+ Новый проект</a>
                 </div>
             </div>
 
-            <form id="filterForm" class="catalog-filters">
-                <div class="field">
-                    <label for="search">Поиск</label>
-                    <input class="control" id="search" type="text" placeholder="Ключевые слова">
-                </div>
-                <div class="field">
-                    <label for="filterTags">Теги</label>
-                    <input class="control" id="filterTags" type="text" placeholder="fastapi, web">
-                </div>
-                <div class="field">
-                    <label for="filterRoles">Роли</label>
-                    <input class="control" id="filterRoles" type="text" placeholder="backend, analyst">
-                </div>
-                <div class="field">
-                    <label for="sortOrder">Сортировка</label>
-                    <select class="control-select" id="sortOrder">
-                        <option value="newest">Сначала новые</option>
-                        <option value="oldest">Сначала старые</option>
-                    </select>
-                </div>
-            </form>
+            <div class="meridian-card-grid" id="statsGrid">
+                <article class="meridian-stat-card">
+                    <div class="meridian-stat-top">
+                        <div class="meridian-stat-icon">
+                            <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+                                <rect x="2" y="2" width="11" height="11" rx="2"></rect>
+                                <path d="M5 7.5h5M7.5 5v5"></path>
+                            </svg>
+                        </div>
+                        <span class="meridian-pill meridian-pill-green" id="statMyProjectsPill">Активно</span>
+                    </div>
+                    <div class="meridian-stat-number" id="statMyProjects">0</div>
+                    <div class="meridian-stat-label">Моих проектов</div>
+                    <div class="meridian-stat-meta" id="statMyProjectsMeta">Активных: 0</div>
+                </article>
 
-            <div class="button-row">
-                <button class="button button-primary" type="button" id="applyFiltersBtn">Применить фильтры</button>
-                <button class="button" type="button" id="resetFiltersBtn">Сбросить</button>
+                <article class="meridian-stat-card">
+                    <div class="meridian-stat-top">
+                        <div class="meridian-stat-icon">
+                            <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+                                <circle cx="7.5" cy="7.5" r="5.5"></circle>
+                                <path d="M7.5 4.5v3l2 1.5"></path>
+                            </svg>
+                        </div>
+                        <span class="meridian-pill meridian-pill-amber" id="statIncomingApplicationsPill">В очереди</span>
+                    </div>
+                    <div class="meridian-stat-number" id="statIncomingApplications">0</div>
+                    <div class="meridian-stat-label">Входящих откликов</div>
+                    <div class="meridian-stat-meta" id="statIncomingApplicationsMeta">Новых: 0</div>
+                </article>
+
+                <article class="meridian-stat-card">
+                    <div class="meridian-stat-top">
+                        <div class="meridian-stat-icon">
+                            <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+                                <path d="M7.5 1.5L9.5 5.5H13.5L10.5 8L11.5 12L7.5 9.5L3.5 12L4.5 8L1.5 5.5H5.5Z"></path>
+                            </svg>
+                        </div>
+                        <span class="meridian-pill meridian-pill-gray">Каталог</span>
+                    </div>
+                    <div class="meridian-stat-number" id="statCatalogProjects">0</div>
+                    <div class="meridian-stat-label">Активных проектов в каталоге</div>
+                    <div class="meridian-stat-meta" id="statNotificationsMeta">Непрочитанных уведомлений: 0</div>
+                </article>
             </div>
 
-            <div class="card-grid" id="projectsGrid" style="margin-top: 20px;"></div>
+            <section class="meridian-table-card">
+                <div class="meridian-table-head">
+                    <span class="meridian-table-title">Последние проекты</span>
+                    <div class="meridian-chip-row" id="recentProjectsFilters">
+                        <button class="meridian-chip meridian-chip-button meridian-chip-active" type="button" data-filter="all">Мои</button>
+                        <button class="meridian-chip meridian-chip-button" type="button" data-filter="active">Активные</button>
+                        <button class="meridian-chip meridian-chip-button" type="button" data-filter="archived">Архив</button>
+                    </div>
+                </div>
+                <div class="meridian-table-wrap">
+                    <table class="meridian-table">
+                        <thead>
+                        <tr>
+                            <th>Проект</th>
+                            <th>Автор</th>
+                            <th>Статус</th>
+                            <th>Отклики</th>
+                            <th>Дата</th>
+                        </tr>
+                        </thead>
+                        <tbody id="recentProjectsTable"></tbody>
+                    </table>
+                </div>
+            </section>
 
-            <div class="pager">
-                <button class="button" id="prevPageBtn" type="button">Назад</button>
-                <span class="muted" id="pageInfo">Страница 1</span>
-                <button class="button" id="nextPageBtn" type="button">Вперёд</button>
-            </div>
+            <section class="meridian-section" id="catalog">
+                <div class="meridian-section-head">
+                    <div>
+                        <div class="meridian-section-label">Каталог</div>
+                        <h2 class="meridian-section-title">Найди подходящий проект</h2>
+                    </div>
+                    <div class="meridian-section-body" id="catalogMeta">
+                        Загружаем активные проекты и фильтры каталога.
+                    </div>
+                </div>
+
+                <form class="meridian-form-grid" id="filterForm">
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="search">Поиск</label>
+                        <input class="meridian-field-input" id="search" type="text" placeholder="Ключевые слова">
+                    </div>
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="filterTags">Теги</label>
+                        <input class="meridian-field-input" id="filterTags" type="text" placeholder="fastapi, analytics">
+                    </div>
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="filterRoles">Роли</label>
+                        <input class="meridian-field-input" id="filterRoles" type="text" placeholder="backend, analyst">
+                    </div>
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="sortOrder">Сортировка</label>
+                        <select class="meridian-field-select" id="sortOrder">
+                            <option value="newest">Сначала новые</option>
+                            <option value="oldest">Сначала старые</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="meridian-section-actions">
+                    <button class="meridian-btn meridian-btn-solid" type="button" id="applyFiltersBtn">Применить фильтры</button>
+                    <button class="meridian-btn meridian-btn-ghost" type="button" id="resetFiltersBtn">Сбросить</button>
+                </div>
+
+                <div class="meridian-project-grid" id="projectsGrid"></div>
+
+                <div class="meridian-pager">
+                    <button class="meridian-btn meridian-btn-ghost" id="prevPageBtn" type="button">Назад</button>
+                    <span class="meridian-muted" id="pageInfo">Страница 1</span>
+                    <button class="meridian-btn meridian-btn-ghost" id="nextPageBtn" type="button">Вперёд</button>
+                </div>
+            </section>
+
+            <section class="meridian-section" id="applications">
+                <div class="meridian-section-head">
+                    <div>
+                        <div class="meridian-section-label">Отклики</div>
+                        <h2 class="meridian-section-title">Входящие заявки</h2>
+                    </div>
+                    <div class="meridian-section-body">
+                        Смотри последние отклики на твои проекты и переходи к полным карточкам для принятия решения.
+                    </div>
+                </div>
+                <div class="meridian-list" id="applicationsList"></div>
+            </section>
         </section>
-    </section>
+    </div>
 </main>
 
 <script src="/static/auth.js"></script>
@@ -103,11 +283,17 @@
     const API = window.location.origin;
     let currentPage = 1;
     let totalPages = 1;
+    let recentProjectsFilter = "all";
+    let recentProjectsAll = [];
 
     function formatDate(value) {
-        if (!value) return "дата не указана";
+        if (!value) return "—";
         const date = new Date(value);
-        return Number.isNaN(date.getTime()) ? value : date.toLocaleString("ru-RU");
+        return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("ru-RU", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        });
     }
 
     function parseDateForSort(value) {
@@ -116,55 +302,284 @@
         return Number.isNaN(timestamp) ? 0 : timestamp;
     }
 
-    function activeFiltersCount() {
-        const values = [
-            document.getElementById("search").value.trim(),
-            document.getElementById("filterTags").value.trim(),
-            document.getElementById("filterRoles").value.trim(),
-            document.getElementById("sortOrder").value !== "newest" ? document.getElementById("sortOrder").value : ""
-        ];
-        return values.filter(Boolean).length;
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function monogram(value) {
+        const source = (value || "?").trim();
+        const parts = source.split(/\s+/).filter(Boolean);
+        if (!parts.length) return "?";
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase();
+    }
+
+    function projectStatus(project) {
+        if (project.status === "archived") {
+            return '<span class="meridian-status meridian-status-idle">Архив</span>';
+        }
+        if (project.applications_open === false) {
+            return '<span class="meridian-status meridian-status-warn">Набор закрыт</span>';
+        }
+        if (project.status === "active") {
+            return '<span class="meridian-status meridian-status-ok">Активен</span>';
+        }
+        return '<span class="meridian-status meridian-status-idle">Неизвестно</span>';
+    }
+
+    function applicationStatus(status) {
+        if (status === "accepted") return "Принят";
+        if (status === "rejected") return "Отклонён";
+        if (status === "removed") return "Убран";
+        return "Новый";
+    }
+
+    function projectRow(project) {
+        return `
+            <tr>
+                <td>
+                    <a class="meridian-table-name meridian-table-link" href="/project/${project.id}">${escapeHtml(project.title)}</a>
+                    <div class="meridian-table-sub">${escapeHtml(project.required_roles.join(", ") || "Роли не указаны")}</div>
+                </td>
+                <td>
+                    <div class="meridian-table-name">${escapeHtml(project.owner_full_name || project.owner_username || "—")}</div>
+                    <div class="meridian-table-sub">@${escapeHtml(project.owner_username || "user")}</div>
+                </td>
+                <td>${projectStatus(project)}</td>
+                <td>${project.applications_count}</td>
+                <td>${formatDate(project.created_at)}</td>
+            </tr>
+        `;
+    }
+
+    function filteredRecentProjects() {
+        if (recentProjectsFilter === "active") {
+            return recentProjectsAll.filter((project) => project.status === "active");
+        }
+        if (recentProjectsFilter === "archived") {
+            return recentProjectsAll.filter((project) => project.status === "archived");
+        }
+        return recentProjectsAll;
+    }
+
+    function renderRecentProjects() {
+        const table = document.getElementById("recentProjectsTable");
+        const items = filteredRecentProjects();
+        const emptyText = recentProjectsFilter === "active"
+            ? "У тебя пока нет активных проектов."
+            : recentProjectsFilter === "archived"
+                ? "У тебя пока нет архивных проектов."
+                : "У тебя пока нет проектов. Начни с создания первой карточки.";
+
+        if (!items.length) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        <div class="meridian-empty-inline">${emptyText}</div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        table.innerHTML = items.map(projectRow).join("");
+    }
+
+    function syncRecentProjectFilters() {
+        document.querySelectorAll("#recentProjectsFilters [data-filter]").forEach((button) => {
+            button.classList.toggle("meridian-chip-active", button.dataset.filter === recentProjectsFilter);
+        });
     }
 
     function projectCard(project) {
-        const tags = project.tags.map(tag => `<span class="chip">${tag}</span>`).join("");
-        const roles = project.required_roles.map(role => `<span class="chip chip-role">${role}</span>`).join("");
-        const statusClass = project.status === "active" ? "status-active" : "status-archived";
+        const tags = project.tags.map(tag => `<span class="meridian-chip meridian-chip-gold">${escapeHtml(tag)}</span>`).join("");
+        const roles = project.required_roles.map(role => `<span class="meridian-chip">${escapeHtml(role)}</span>`).join("");
         return `
-            <article class="project-card fade-up">
-                <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <h3>${project.title}</h3>
-                    <span class="status-pill ${statusClass}">${project.status === "active" ? "Активен" : "Архив"}</span>
+            <article class="meridian-project-card">
+                <div class="meridian-project-card-top">
+                    <div class="meridian-project-icon">
+                        <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+                            <rect x="2" y="2" width="11" height="11" rx="2"></rect>
+                            <path d="M5 7.5h5M7.5 5v5"></path>
+                        </svg>
+                    </div>
+                    ${project.status === "archived"
+                        ? '<span class="meridian-pill meridian-pill-gray">Архив</span>'
+                        : project.applications_open === false
+                            ? '<span class="meridian-pill meridian-pill-amber">Набор закрыт</span>'
+                            : '<span class="meridian-pill meridian-pill-green">Активно</span>'}
                 </div>
-                <p>${project.description}</p>
-                <div class="chips" style="margin-top: 14px;">${tags}${roles}</div>
-                <div class="card-meta">
-                    Автор: <a href="/profile/${project.owner_username}">${project.owner_full_name || project.owner_username}</a><br>
-                    Откликов: ${project.applications_count}<br>
-                    Создан: ${formatDate(project.created_at)}
+                <h3 class="meridian-project-card-title">${escapeHtml(project.title)}</h3>
+                <p class="meridian-project-card-text">${escapeHtml(project.description)}</p>
+                <div class="meridian-chip-row">${tags}${roles}</div>
+                <div class="meridian-project-card-meta">
+                    <span>Автор: ${escapeHtml(project.owner_full_name || project.owner_username || "—")}</span>
+                    <span>Отклики: ${project.applications_count}</span>
                 </div>
-                <div class="button-row">
-                    <a class="button-link button-primary" href="/project/${project.id}">Открыть проект</a>
-                    ${project.github_url ? `<a class="button-link" target="_blank" href="${project.github_url}">GitHub</a>` : ""}
+                <div class="meridian-project-card-actions">
+                    <a class="meridian-btn meridian-btn-solid" href="/project/${project.id}">Открыть</a>
+                    <a class="meridian-btn meridian-btn-ghost" href="/profile/${project.owner_username}">Профиль</a>
                 </div>
             </article>
         `;
     }
 
-    async function loadCurrentUser() {
-        const response = await window.authFetch(`${API}/api/me`);
-        if (!response.ok) {
-            window.location.href = "/login";
+    function applicationCard(application) {
+        const profileUrl = `/profile/${encodeURIComponent(application.applicant_username || "user")}`;
+        return `
+            <article class="meridian-application-card">
+                <div class="meridian-application-head">
+                    <div>
+                        <strong><a href="${profileUrl}" style="text-decoration:none;">${escapeHtml(application.applicant_full_name || application.applicant_username || "Кандидат")}</a></strong>
+                        <span><a href="${profileUrl}" style="text-decoration:none; color:inherit;">@${escapeHtml(application.applicant_username || "user")}</a></span>
+                    </div>
+                    <span class="meridian-pill ${application.status === "new" ? "meridian-pill-amber" : application.status === "accepted" ? "meridian-pill-green" : application.status === "rejected" ? "meridian-pill-red" : "meridian-pill-gray"}">
+                        ${applicationStatus(application.status)}
+                    </span>
+                </div>
+                <p>${escapeHtml(application.message)}</p>
+                <div class="meridian-application-meta">
+                    <span>Проект: ${escapeHtml(application.project_title || "—")}</span>
+                    <span>${formatDate(application.created_at)}</span>
+                </div>
+            </article>
+        `;
+    }
+
+    function renderSidebarTeam(data) {
+        const sidebarTeam = document.getElementById("sidebarTeam");
+        const teamProjects = Array.isArray(data.team_projects) ? data.team_projects : [];
+        if (!teamProjects.length) {
+            sidebarTeam.innerHTML = `<div class="meridian-sidebar-note">Пока нет команд, в которых ты уже участвуешь или которые собрал сам.</div>`;
             return;
         }
-        const user = await response.json();
-        document.getElementById("profileLink").textContent = user.full_name || user.username;
+
+        sidebarTeam.innerHTML = teamProjects.map((project) => `
+            <section class="meridian-sidebar-team-project">
+                <a class="meridian-sidebar-team-project-link" href="/project/${project.project_id}">
+                    ${escapeHtml(project.project_title || "Проект")}
+                </a>
+                <div class="meridian-sidebar-team-members">
+                    <a class="meridian-sidebar-member meridian-sidebar-member-owner" href="/profile/${escapeHtml(project.owner_username || "me")}">
+                        <strong>${escapeHtml(project.owner_full_name || project.owner_username || "Автор проекта")}</strong>
+                        <span>@${escapeHtml(project.owner_username || "owner")} · владелец</span>
+                    </a>
+                    ${(Array.isArray(project.members) ? project.members : []).map((member) => `
+                        <a class="meridian-sidebar-member" href="/profile/${member.username}">
+                            <strong>${escapeHtml(member.full_name || member.username)}</strong>
+                            <span>${member.is_current_user ? "Ты" : `@${escapeHtml(member.username)}`}${member.role ? ` · ${escapeHtml(member.role)}` : " · роль не указана"}</span>
+                        </a>
+                    `).join("")}
+                </div>
+            </section>
+        `).join("");
+    }
+
+    async function loadOverview() {
+        const response = await window.authFetch(`${API}/api/dashboard/overview`);
+        if (!response.ok) {
+            window.location.href = "/login";
+            return null;
+        }
+
+        const data = await response.json();
+        const displayName = data.user.full_name || data.user.username || "Профиль";
+        const triggerText = document.querySelector(".meridian-user-menu-trigger-text");
+        if (triggerText) triggerText.textContent = displayName;
+        const userMenuName = document.getElementById("userMenuName");
+        const userMenuAvatar = document.getElementById("userMenuAvatar");
+        const userMenuRole = document.querySelector(".meridian-user-menu-role");
+        if (userMenuName) userMenuName.textContent = displayName;
+        if (userMenuRole) {
+            userMenuRole.textContent = data.user.roles?.length
+                ? data.user.roles.join(", ")
+                : "Участник платформы";
+        }
+        if (userMenuAvatar) {
+            if (data.user.photo_url) {
+                userMenuAvatar.textContent = "";
+                userMenuAvatar.style.backgroundImage = `url("${data.user.photo_url}")`;
+                userMenuAvatar.classList.add("has-photo");
+            } else {
+                userMenuAvatar.textContent = monogram(displayName);
+                userMenuAvatar.style.backgroundImage = "";
+                userMenuAvatar.classList.remove("has-photo");
+            }
+        }
+        renderSidebarTeam(data);
+
+        document.getElementById("heroMetricProjects").textContent = String(data.metrics.catalog_active_projects);
+        document.getElementById("heroMetricApplications").textContent = String(data.metrics.incoming_applications_new);
+        document.getElementById("heroMetricNotifications").textContent = String(data.metrics.notifications_unread);
+
+        document.getElementById("statMyProjects").textContent = String(data.metrics.my_projects_total);
+        const projectsPill = document.getElementById("statMyProjectsPill");
+        const closedProjects = Number(data.metrics.my_projects_closed || 0);
+        if (projectsPill) {
+            projectsPill.className = "meridian-pill " + (
+                data.metrics.my_projects_active > 0
+                    ? "meridian-pill-green"
+                    : closedProjects > 0
+                        ? "meridian-pill-amber"
+                        : "meridian-pill-gray"
+            );
+            projectsPill.textContent = data.metrics.my_projects_active > 0
+                ? "Активно"
+                : closedProjects > 0
+                    ? "Набор закрыт"
+                    : "Архив";
+        }
+        document.getElementById("statMyProjectsMeta").textContent =
+            `Активных: ${data.metrics.my_projects_active} · Закрытых: ${closedProjects} · Архивных: ${data.metrics.my_projects_archived}`;
+        document.getElementById("statIncomingApplications").textContent = String(data.metrics.incoming_applications_total);
+        const incomingPill = document.getElementById("statIncomingApplicationsPill");
+        if (incomingPill) {
+            incomingPill.className = "meridian-pill " + (
+                data.metrics.incoming_applications_new > 0
+                    ? "meridian-pill-amber"
+                    : data.metrics.incoming_applications_total > 0
+                        ? "meridian-pill-green"
+                        : "meridian-pill-gray"
+            );
+            incomingPill.textContent = data.metrics.incoming_applications_new > 0
+                ? "В очереди"
+                : data.metrics.incoming_applications_total > 0
+                    ? "Обработано"
+                    : "Пусто";
+        }
+        document.getElementById("statIncomingApplicationsMeta").textContent = `Новых: ${data.metrics.incoming_applications_new}`;
+        document.getElementById("statCatalogProjects").textContent = String(data.metrics.catalog_active_projects);
+        document.getElementById("statNotificationsMeta").textContent = `Непрочитанных уведомлений: ${data.metrics.notifications_unread}`;
+
+        document.getElementById("sidebarProjectsCount").textContent = String(data.sidebar_counts.projects);
+        document.getElementById("sidebarApplicationsCount").textContent = String(data.sidebar_counts.applications);
+
+        document.getElementById("overviewSubtitle").textContent =
+            `Сейчас у тебя ${data.metrics.my_projects_total} проектов, ${data.metrics.incoming_applications_new} новых откликов и ${data.metrics.notifications_unread} непрочитанных уведомлений.`;
+
+        recentProjectsAll = Array.isArray(data.recent_projects) ? data.recent_projects : [];
+        syncRecentProjectFilters();
+        renderRecentProjects();
+
+        const applicationsList = document.getElementById("applicationsList");
+        if (!data.incoming_applications.length) {
+            applicationsList.innerHTML = `<div class="meridian-empty-card">Новых откликов пока нет. Они появятся здесь автоматически.</div>`;
+        } else {
+            applicationsList.innerHTML = data.incoming_applications.map(applicationCard).join("");
+        }
+
+        return data;
     }
 
     async function loadProjects() {
         const params = new URLSearchParams({
             page: String(currentPage),
-            page_size: "9",
+            page_size: "6",
             search: document.getElementById("search").value.trim(),
             tags: document.getElementById("filterTags").value.trim(),
             roles: document.getElementById("filterRoles").value.trim(),
@@ -174,35 +589,27 @@
 
         const response = await fetch(`${API}/api/projects?${params.toString()}`);
         const data = await response.json();
+        const sortOrder = document.getElementById("sortOrder").value;
         const grid = document.getElementById("projectsGrid");
-        const selectedSortOrder = document.getElementById("sortOrder").value;
 
         data.items = (data.items || []).sort((left, right) => {
             const leftTime = parseDateForSort(left.created_at);
             const rightTime = parseDateForSort(right.created_at);
             if (leftTime !== rightTime) {
-                return selectedSortOrder === "oldest" ? leftTime - rightTime : rightTime - leftTime;
+                return sortOrder === "oldest" ? leftTime - rightTime : rightTime - leftTime;
             }
-            return selectedSortOrder === "oldest" ? left.id - right.id : right.id - left.id;
+            return sortOrder === "oldest" ? left.id - right.id : right.id - left.id;
         });
 
         totalPages = data.pages || 1;
-        document.getElementById("catalogMeta").textContent = `Найдено проектов: ${data.total}. Используй фильтры, чтобы быстрее находить нужные команды.`;
+        document.getElementById("catalogMeta").textContent =
+            `Найдено ${data.total} активных проектов. Фильтруй каталог по тегам, ролям и порядку публикации.`;
         document.getElementById("pageInfo").textContent = `Страница ${data.page} из ${data.pages}`;
         document.getElementById("prevPageBtn").disabled = currentPage <= 1;
         document.getElementById("nextPageBtn").disabled = currentPage >= totalPages;
 
-        document.getElementById("metricProjects").textContent = String(data.total);
-        document.getElementById("metricPage").textContent = `${data.page}/${data.pages}`;
-        document.getElementById("metricFilters").textContent = String(activeFiltersCount());
-
         if (!data.items.length) {
-            grid.innerHTML = `
-                <article class="empty-card fade-up">
-                    <h3>Проекты не найдены</h3>
-                    <p>Попробуй изменить фильтры или перейти к созданию новой карточки проекта через кнопку в шапке.</p>
-                </article>
-            `;
+            grid.innerHTML = `<div class="meridian-empty-card">По текущим фильтрам проектов не найдено.</div>`;
             return;
         }
 
@@ -217,35 +624,124 @@
         window.location.href = "/login";
     }
 
+    function setUserMenuOpen(isOpen) {
+        const button = document.getElementById("profileLink");
+        const panel = document.getElementById("userMenuPanel");
+        button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        button.classList.toggle("active", isOpen);
+        panel.classList.toggle("visible", isOpen);
+        panel.setAttribute("aria-hidden", isOpen ? "false" : "true");
+        document.getElementById("userMenu").classList.toggle("is-open", isOpen);
+    }
+
+    function setActiveNavLink(hash) {
+        document.querySelectorAll(".meridian-nav-link").forEach((link) => {
+            link.classList.toggle("active", link.getAttribute("href") === hash);
+        });
+    }
+
+    function syncActiveNavLink() {
+        const sections = ["#overview", "#catalog", "#applications"]
+            .map((hash) => {
+                const element = document.querySelector(hash);
+                return element ? { hash, element } : null;
+            })
+            .filter(Boolean);
+
+        const anchorLine = 160;
+        const inViewSection = sections.find((section) => {
+            const rect = section.element.getBoundingClientRect();
+            return rect.top <= anchorLine && rect.bottom > anchorLine;
+        });
+
+        if (inViewSection) {
+            setActiveNavLink(inViewSection.hash);
+            return;
+        }
+
+        const nearestSection = sections.reduce((best, section) => {
+            const rect = section.element.getBoundingClientRect();
+            const distance = Math.abs(rect.top - anchorLine);
+            if (!best || distance < best.distance) {
+                return { hash: section.hash, distance };
+            }
+            return best;
+        }, null);
+
+        setActiveNavLink(nearestSection ? nearestSection.hash : "#overview");
+    }
+
     document.getElementById("applyFiltersBtn").addEventListener("click", () => {
         currentPage = 1;
         loadProjects();
     });
+
     document.getElementById("resetFiltersBtn").addEventListener("click", () => {
         document.getElementById("filterForm").reset();
         currentPage = 1;
         loadProjects();
     });
+
     document.getElementById("prevPageBtn").addEventListener("click", () => {
         if (currentPage > 1) {
             currentPage -= 1;
             loadProjects();
         }
     });
+
     document.getElementById("nextPageBtn").addEventListener("click", () => {
         if (currentPage < totalPages) {
             currentPage += 1;
             loadProjects();
         }
     });
+
     document.getElementById("logoutBtn").addEventListener("click", logout);
+    document.getElementById("profileLink").addEventListener("click", () => {
+        const isOpen = document.getElementById("profileLink").getAttribute("aria-expanded") === "true";
+        setUserMenuOpen(!isOpen);
+    });
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest("#userMenu")) {
+            setUserMenuOpen(false);
+        }
+    });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            setUserMenuOpen(false);
+        }
+    });
+    document.getElementById("recentProjectsFilters").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-filter]");
+        if (!button) {
+            return;
+        }
+        recentProjectsFilter = button.dataset.filter;
+        syncRecentProjectFilters();
+        renderRecentProjects();
+    });
+
+    document.querySelectorAll(".meridian-nav-link").forEach((link) => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const hash = link.getAttribute("href");
+            const target = hash ? document.querySelector(hash) : null;
+            setActiveNavLink(hash);
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        });
+    });
+
+    window.addEventListener("scroll", syncActiveNavLink, { passive: true });
 
     window.addEventListener("load", async () => {
         if (window.initNotifications) {
             window.initNotifications({ hostId: "notificationsHost" });
         }
-        await loadCurrentUser();
+        await loadOverview();
         await loadProjects();
+        syncActiveNavLink();
     });
 </script>
 </body>

@@ -1,134 +1,163 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль</title>
+    <title>Профиль — StudCollab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/theme.css">
 </head>
 <body>
-<header class="topbar">
-    <div class="topbar-row">
-        <div class="brand-lockup">
-            <div class="brand-mark">SP</div>
-            <div class="brand-copy">
-                <strong>Profile Workspace</strong>
-                <span>Роли, навыки, опубликованные проекты и отклики</span>
+
+<header class="topbar meridian-topbar">
+    <div class="topbar-row meridian-topbar-row">
+        <div class="meridian-brand">
+            <div class="meridian-brand-mark">
+                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect x="1" y="1" width="5" height="5" rx="1" fill="white"/>
+                    <rect x="8" y="1" width="5" height="5" rx="1" fill="white" opacity=".55"/>
+                    <rect x="1" y="8" width="5" height="5" rx="1" fill="white" opacity=".55"/>
+                    <rect x="8" y="8" width="5" height="5" rx="1" fill="white" opacity=".28"/>
+                </svg>
+            </div>
+            <div class="meridian-brand-copy">
+                <strong>StudCollab</strong>
+                <span>Роли, навыки и опубликованные проекты</span>
             </div>
         </div>
-        <div class="topbar-actions">
-            <a class="button-link" href="/">Каталог</a>
+
+        <div class="meridian-topbar-actions">
             <div id="notificationsHost"></div>
-            <div class="muted" id="topbarMeta"></div>
+            <a class="meridian-btn meridian-btn-ghost" href="/">Каталог</a>
+            <span class="meridian-muted text-sm" id="topbarMeta"></span>
         </div>
     </div>
 </header>
 
-<main class="app-shell">
-    <section class="hero fade-up">
-        <div class="hero-card profile-hero-card">
-            <div class="profile-hero-layout">
-                <div class="profile-hero-copy">
-                    <div class="eyebrow">Profile</div>
-                    <h1 class="hero-title" id="profileTitle">Загрузка профиля...</h1>
-                    <p class="hero-text" id="profileBio">Подготавливаем данные пользователя и его карточки проектов.</p>
-                    <div class="hero-metrics" id="heroMetrics">
-                        <div class="metric">
-                            <strong id="projectsMetric">0</strong>
-                            <span>опубликованных проектов</span>
-                        </div>
+<main class="meridian-shell">
+
+    <!-- Hero: профиль -->
+    <section class="meridian-hero fade-up">
+        <div class="meridian-hero-inner meridian-profile-hero">
+            <div class="meridian-profile-hero-copy">
+                <div class="meridian-section-label">Профиль</div>
+                <h1 class="meridian-page-title" id="profileTitle">Загрузка профиля…</h1>
+                <p class="meridian-page-subtitle" id="profileBio">Подготавливаем данные пользователя и его карточки проектов.</p>
+
+                <div class="meridian-hero-metrics" style="margin-top: 32px;">
+                    <div class="meridian-hero-metric">
+                        <span class="meridian-hero-metric-value" id="projectsMetric">0</span>
+                        <span class="meridian-hero-metric-label">опубликованных проектов</span>
                     </div>
-                    <div class="chip-row" id="profileChips" style="margin-top: 18px;"></div>
                 </div>
 
-                <aside class="profile-hero-media">
-                    <div class="profile-photo-card" id="profilePhotoCard">
-                        <div class="profile-photo-backdrop"></div>
-                        <img class="profile-photo-image" id="profilePhotoImage" alt="Фото профиля" hidden>
-                        <div class="profile-photo-placeholder" id="profilePhotoPlaceholder">
-                            <div class="profile-photo-monogram" id="profilePhotoMonogram">SP</div>
-                            <div class="profile-photo-copy">
-                                <strong id="profilePhotoCaption">Profile Portrait</strong>
-                                <span id="profilePhotoSubcaption">Добавь фото, чтобы профиль выглядел как законченная публичная карточка.</span>
-                            </div>
+                <div class="meridian-chip-row" id="profileChips" style="margin-top: 20px;"></div>
+            </div>
+
+            <div class="meridian-profile-hero-media">
+                <div class="meridian-profile-photo-card" id="profilePhotoCard">
+                    <div class="meridian-profile-photo-backdrop"></div>
+                    <img class="meridian-profile-photo-image" id="profilePhotoImage" alt="Фото профиля" hidden>
+                    <div class="meridian-profile-photo-placeholder" id="profilePhotoPlaceholder">
+                        <div class="meridian-profile-monogram" id="profilePhotoMonogram">SP</div>
+                        <div class="meridian-profile-photo-copy">
+                            <strong id="profilePhotoCaption">Фото профиля</strong>
+                            <span id="profilePhotoSubcaption">Добавь фото, чтобы профиль выглядел как законченная публичная карточка.</span>
                         </div>
-                        <div class="profile-photo-glow"></div>
                     </div>
-                </aside>
+                    <div class="meridian-profile-photo-glow"></div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="page-grid">
-        <aside class="stack" id="editPanel" style="display:none;">
-            <section class="section-card fade-up">
-                <h2>Редактировать профиль</h2>
-                <p class="section-subtitle">
-                    Эти данные видны в карточке пользователя и помогают другим быстрее понять,
-                    на какую роль ты подойдёшь в команде.
-                </p>
+    <!-- Основная сетка -->
+    <div class="meridian-page-grid meridian-profile-layout">
 
-                <form id="profileForm">
-                    <div class="field">
-                        <label for="fullName">Имя</label>
-                        <input class="control" id="fullName" type="text">
+        <!-- Левая колонка: редактирование + отклики -->
+        <aside class="meridian-profile-side" id="profileSideColumn" style="display:none;">
+            <section class="meridian-panel fade-up" id="editPanel" style="display:none;">
+                <div class="meridian-panel-head">
+                    <div>
+                        <div class="meridian-content-title">Редактировать профиль</div>
+                        <div class="meridian-content-sub">Эти данные видны в карточке пользователя и помогают другим быстрее понять, на какую роль ты подойдёшь в команде.</div>
                     </div>
-                    <div class="field">
-                        <label for="bio">Короткое описание</label>
-                        <textarea class="control-area" id="bio"></textarea>
+                </div>
+
+                <form id="profileForm" class="meridian-form-grid">
+                    <div class="meridian-field-group meridian-field-span-2">
+                        <label class="meridian-field-label" for="fullName">Имя</label>
+                        <input class="meridian-field-input" id="fullName" type="text" placeholder="Инал Шидаков">
                     </div>
-                    <div class="field">
-                        <label for="photoFile">Фото профиля</label>
-                        <input class="control" id="photoFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+
+                    <div class="meridian-field-group meridian-field-span-2">
+                        <label class="meridian-field-label" for="bio">Короткое описание</label>
+                        <textarea class="meridian-field-textarea" id="bio" placeholder="Кто ты, над чем работаешь, какие задачи тебе интересны."></textarea>
+                    </div>
+
+                    <div class="meridian-field-group meridian-field-span-2">
+                        <label class="meridian-field-label" for="photoFile">Фото профиля</label>
+                        <input class="meridian-field-input" id="photoFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
                         <input id="photoUrl" type="hidden">
-                        <div class="button-row" style="margin-top: 10px;">
-                            <button class="button" type="button" id="uploadPhotoBtn">Загрузить фото</button>
-                            <span class="muted" id="photoUploadMeta">Можно JPG, PNG, WEBP или GIF до 5 МБ.</span>
+                        <div class="meridian-section-actions" style="margin-top: 8px;">
+                            <button class="meridian-btn meridian-btn-ghost" type="button" id="uploadPhotoBtn">Загрузить фото</button>
+                            <button class="meridian-btn meridian-btn-ghost" type="button" id="removePhotoBtn">Убрать фото</button>
+                            <span class="meridian-muted text-sm" id="photoUploadMeta">Можно JPG, PNG, WEBP или GIF до 5 МБ.</span>
                         </div>
-                        <div class="helper">Файл загрузится в проект и автоматически появится в правом блоке профиля.</div>
+                        <div class="meridian-input-hint">Файл загрузится в проект и автоматически появится в правом блоке профиля.</div>
                     </div>
-                    <div class="field">
-                        <label for="skills">Навыки</label>
-                        <input class="control" id="skills" type="text" placeholder="python, fastapi, sql">
+
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="skills">Навыки</label>
+                        <input class="meridian-field-input" id="skills" type="text" placeholder="python, fastapi, sql">
                     </div>
-                    <div class="field">
-                        <label for="roles">Роли</label>
-                        <input class="control" id="roles" type="text" placeholder="backend, analyst">
+
+                    <div class="meridian-field-group">
+                        <label class="meridian-field-label" for="roles">Роли</label>
+                        <input class="meridian-field-input" id="roles" type="text" placeholder="backend, analyst">
                     </div>
-                    <div class="field">
-                        <label for="links">Ссылки</label>
-                        <input class="control" id="links" type="text" placeholder="https://github.com/me, https://t.me/me">
+
+                    <div class="meridian-field-group meridian-field-span-2">
+                        <label class="meridian-field-label" for="links">Ссылки</label>
+                        <input class="meridian-field-input" id="links" type="text" placeholder="https://github.com/me, https://t.me/me">
                     </div>
-                    <div class="button-row">
-                        <button class="button button-primary" type="submit">Сохранить изменения</button>
+
+                    <div class="meridian-section-actions meridian-field-span-2">
+                        <button class="meridian-btn meridian-btn-solid meridian-btn-lg" type="submit">Сохранить изменения</button>
                     </div>
-                    <div class="message" id="formMessage"></div>
+
+                    <div class="message meridian-field-span-2" id="formMessage"></div>
                 </form>
+            </section>
+
+            <section class="meridian-panel fade-up" id="applicationsBlock" style="display:none;">
+                <div class="meridian-panel-head">
+                    <div>
+                        <div class="meridian-content-title">Мои отклики</div>
+                        <div class="meridian-content-sub">Здесь собраны твои заявки на чужие проекты и их текущие статусы.</div>
+                    </div>
+                </div>
+                <div class="meridian-list" id="applicationsList"></div>
             </section>
         </aside>
 
-        <section class="stack">
-            <section class="section-card fade-up">
-                <div class="section-title-row">
-                    <div>
-                        <h2>Проекты пользователя</h2>
-                        <p class="section-subtitle" id="projectsMeta">Загрузка списка проектов...</p>
-                    </div>
-                </div>
-                <div class="stack" id="projectsList"></div>
-            </section>
+        <!-- Правая колонка: проекты -->
+        <section class="meridian-content-col meridian-profile-projects">
 
-            <section class="section-card fade-up" id="applicationsBlock" style="display:none;">
-                <div class="section-title-row">
+            <section class="meridian-panel fade-up">
+                <div class="meridian-panel-head">
                     <div>
-                        <h2>Мои отклики</h2>
-                        <p class="section-subtitle">Статусы заявок на чужие проекты.</p>
+                        <div class="meridian-content-title">Проекты пользователя</div>
+                        <div class="meridian-content-sub" id="projectsMeta">Загрузка списка проектов…</div>
                     </div>
                 </div>
-                <div class="stack" id="applicationsList"></div>
+                <div class="meridian-project-grid meridian-project-grid-profile" id="projectsList"></div>
             </section>
         </section>
-    </section>
+    </div>
+
 </main>
 
 <script src="/static/auth.js"></script>
@@ -138,6 +167,7 @@
     const pathParts = window.location.pathname.split("/");
     const username = pathParts[pathParts.length - 1];
     let draftPhotoObjectUrl = null;
+    let currentProfileIsMine = false;
     const allowedPhotoTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/gif"]);
 
     function csv(value) {
@@ -172,37 +202,50 @@
         const card = document.getElementById("profilePhotoCard");
         const image = document.getElementById("profilePhotoImage");
         const placeholder = document.getElementById("profilePhotoPlaceholder");
+        const photoCopy = document.querySelector(".meridian-profile-photo-copy");
         const caption = document.getElementById("profilePhotoCaption");
         const subcaption = document.getElementById("profilePhotoSubcaption");
         const monogramNode = document.getElementById("profilePhotoMonogram");
-        const displayName = user.full_name || user.username;
 
-        caption.textContent = displayName;
-        subcaption.textContent = user.roles.length
-            ? `Роли: ${user.roles.join(", ")}`
-            : "Добавь роли и фото, чтобы профиль выглядел как сильная публичная визитка.";
-        monogramNode.textContent = monogram(displayName);
+        if (!card) return;
+        monogramNode.textContent = monogram(user.full_name || user.username);
+        caption.textContent = user.full_name || user.username;
 
-        if (!user.photo_url) {
-            card.classList.remove("has-photo");
-            image.hidden = true;
+        if (user.photo_url) {
+            card.classList.remove("meridian-profile-photo-card-compact");
+            image.src = user.photo_url;
+            image.hidden = false;
+            image.style.display = "";
+            placeholder.hidden = true;
+            placeholder.style.display = "";
+            subcaption.textContent = "Фото профиля загружено.";
+        } else {
             image.removeAttribute("src");
+            image.hidden = true;
+            image.style.display = "none";
             placeholder.hidden = false;
-            return;
+            placeholder.style.display = "grid";
+            if (currentProfileIsMine) {
+                card.classList.remove("meridian-profile-photo-card-compact");
+                if (photoCopy) photoCopy.hidden = false;
+                subcaption.textContent = "Добавь фото, чтобы профиль выглядел как законченная публичная карточка.";
+            } else {
+                card.classList.add("meridian-profile-photo-card-compact");
+                if (photoCopy) photoCopy.hidden = true;
+            }
         }
+    }
 
-        image.src = user.photo_url;
+    function previewDraftPhoto(file) {
+        if (draftPhotoObjectUrl) URL.revokeObjectURL(draftPhotoObjectUrl);
+        draftPhotoObjectUrl = URL.createObjectURL(file);
+        const image = document.getElementById("profilePhotoImage");
+        const placeholder = document.getElementById("profilePhotoPlaceholder");
+        image.src = draftPhotoObjectUrl;
         image.hidden = false;
+        image.style.display = "";
         placeholder.hidden = true;
-        card.classList.add("has-photo");
-
-        image.onerror = () => {
-            card.classList.remove("has-photo");
-            image.hidden = true;
-            image.removeAttribute("src");
-            placeholder.hidden = false;
-            subcaption.textContent = "Фото не загрузилось. Проверь ссылку и попробуй снова.";
-        };
+        placeholder.style.display = "none";
     }
 
     function revokeDraftPhoto() {
@@ -212,71 +255,84 @@
         }
     }
 
-    function previewDraftPhoto(file) {
-        revokeDraftPhoto();
-        draftPhotoObjectUrl = URL.createObjectURL(file);
-
+    document.getElementById("profilePhotoImage").addEventListener("error", () => {
         const card = document.getElementById("profilePhotoCard");
         const image = document.getElementById("profilePhotoImage");
         const placeholder = document.getElementById("profilePhotoPlaceholder");
-        const caption = document.getElementById("profilePhotoCaption");
+        const photoCopy = document.querySelector(".meridian-profile-photo-copy");
         const subcaption = document.getElementById("profilePhotoSubcaption");
-
-        card.classList.add("has-photo");
-        image.src = draftPhotoObjectUrl;
-        image.hidden = false;
-        placeholder.hidden = true;
-        caption.textContent = "Черновой предпросмотр";
-        subcaption.textContent = "Если кадр нравится, нажми «Загрузить фото», и он сохранится в профиле.";
-    }
+        image.removeAttribute("src");
+        image.hidden = true;
+        image.style.display = "none";
+        placeholder.hidden = false;
+        placeholder.style.display = "grid";
+        if (currentProfileIsMine) {
+            card.classList.remove("meridian-profile-photo-card-compact");
+            if (photoCopy) photoCopy.hidden = false;
+            subcaption.textContent = "Фото недоступно. Загрузите новое изображение.";
+        } else {
+            card.classList.add("meridian-profile-photo-card-compact");
+            if (photoCopy) photoCopy.hidden = true;
+        }
+        document.getElementById("photoUrl").value = "";
+    });
 
     function readFileAsBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => {
-                const result = String(reader.result || "");
-                const base64Payload = result.includes(",") ? result.split(",")[1] : result;
-                resolve(base64Payload);
-            };
+            reader.onload = () => resolve(reader.result.split(",")[1]);
             reader.onerror = () => reject(new Error("Не удалось прочитать файл."));
             reader.readAsDataURL(file);
         });
     }
 
     function projectCard(project) {
-        const tags = project.tags.map(tag => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
-        const roles = project.required_roles.map(role => `<span class="chip chip-role">${escapeHtml(role)}</span>`).join("");
-        const statusClass = project.status === "active" ? "status-active" : "status-archived";
+        const tags = (project.tags || []).map(t => `<span class="meridian-chip meridian-chip-gold">${escapeHtml(t)}</span>`).join("");
+        const roles = (project.required_roles || []).map(r => `<span class="meridian-chip">${escapeHtml(r)}</span>`).join("");
         return `
-            <article class="project-card fade-up">
-                <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <h3>${escapeHtml(project.title)}</h3>
-                    <span class="status-pill ${statusClass}">${project.status === "active" ? "Активен" : "Архив"}</span>
+            <article class="meridian-project-card">
+                <div class="meridian-project-card-top">
+                    <div class="meridian-project-icon">
+                        <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+                            <rect x="2" y="2" width="11" height="11" rx="2"></rect>
+                            <path d="M5 7.5h5M7.5 5v5"></path>
+                        </svg>
+                    </div>
+                    ${project.status === "active"
+                        ? '<span class="meridian-pill meridian-pill-green">Активно</span>'
+                        : '<span class="meridian-pill meridian-pill-gray">Архив</span>'}
                 </div>
-                <p>${escapeHtml(project.description)}</p>
-                <div class="chips" style="margin-top: 14px;">${tags}${roles}</div>
-                <div class="card-meta">
-                    Создан: ${formatDate(project.created_at)}<br>
-                    Откликов: ${project.applications_count}
+                <h3 class="meridian-project-card-title">${escapeHtml(project.title)}</h3>
+                <p class="meridian-project-card-text">${escapeHtml(project.description)}</p>
+                <div class="meridian-chip-row">${tags}${roles}</div>
+                <div class="meridian-project-card-meta">
+                    <span>Откликов: ${project.applications_count}</span>
+                    <span>${formatDate(project.created_at)}</span>
                 </div>
-                <div class="button-row">
-                    <a class="button-link button-primary" href="/project/${project.id}">Открыть проект</a>
-                    ${project.github_url ? `<a class="button-link" target="_blank" href="${escapeHtml(project.github_url)}">GitHub</a>` : ""}
+                <div class="meridian-project-card-actions">
+                    <a class="meridian-btn meridian-btn-solid" href="/project/${project.id}">Открыть</a>
                 </div>
             </article>
         `;
     }
 
     function applicationCard(application) {
-        const statusClass = `status-${application.status}`;
+        const statusMap = { accepted: "meridian-pill-green", rejected: "meridian-pill-red", new: "meridian-pill-amber", removed: "meridian-pill-gray" };
+        const statusLabel = { accepted: "Принят", rejected: "Отклонён", new: "Новый", removed: "Убран" };
+        const cls = statusMap[application.status] || "meridian-pill-gray";
+        const label = statusLabel[application.status] || "Неизвестно";
         return `
-            <article class="application-card fade-up">
-                <div class="button-row" style="justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <h3>${escapeHtml(application.project_title)}</h3>
-                    <span class="status-pill ${statusClass}">${escapeHtml(application.status)}</span>
+            <article class="meridian-application-card">
+                <div class="meridian-application-head">
+                    <div>
+                        <strong>${escapeHtml(application.project_title || "Проект")}</strong>
+                    </div>
+                    <span class="meridian-pill ${cls}">${label}</span>
                 </div>
                 <p>${escapeHtml(application.message)}</p>
-                <div class="card-meta">Отправлен: ${formatDate(application.created_at)}</div>
+                <div class="meridian-application-meta">
+                    <span>Отправлен: ${formatDate(application.created_at)}</span>
+                </div>
             </article>
         `;
     }
@@ -287,11 +343,11 @@
         renderProfilePhoto(user);
 
         const chips = [];
-        chips.push(`<span class="chip chip-muted">@${escapeHtml(user.username)}</span>`);
-        if (user.email) chips.push(`<span class="chip chip-muted">${escapeHtml(user.email)}</span>`);
-        user.skills.forEach(skill => chips.push(`<span class="chip">${escapeHtml(skill)}</span>`));
-        user.roles.forEach(role => chips.push(`<span class="chip chip-role">${escapeHtml(role)}</span>`));
-        user.links.forEach(link => chips.push(`<a class="button-link" target="_blank" href="${escapeHtml(link)}">Ссылка</a>`));
+        chips.push(`<span class="meridian-chip meridian-chip-muted">@${escapeHtml(user.username)}</span>`);
+        if (user.email) chips.push(`<span class="meridian-chip meridian-chip-muted">${escapeHtml(user.email)}</span>`);
+        (user.skills || []).forEach(s => chips.push(`<span class="meridian-chip">${escapeHtml(s)}</span>`));
+        (user.roles || []).forEach(r => chips.push(`<span class="meridian-chip meridian-chip-role">${escapeHtml(r)}</span>`));
+        (user.links || []).forEach(l => chips.push(`<a class="meridian-btn meridian-btn-ghost" target="_blank" href="${escapeHtml(l)}">Ссылка ↗</a>`));
         document.getElementById("profileChips").innerHTML = chips.join("");
     }
 
@@ -300,6 +356,10 @@
         const url = isMine ? `${API}/api/profile/me` : `${API}/api/profile/${username}`;
         const response = await window.authFetch(url);
         const data = await response.json();
+        const layout = document.querySelector(".meridian-profile-layout");
+        const sideColumn = document.getElementById("profileSideColumn");
+        const editPanel = document.getElementById("editPanel");
+        const applicationsBlock = document.getElementById("applicationsBlock");
 
         if (!response.ok) {
             document.getElementById("profileTitle").textContent = "Профиль не найден";
@@ -307,17 +367,11 @@
             return;
         }
 
-        fillProfile(data.user);
-        document.getElementById("projectsMetric").textContent = String(data.project_count);
-        document.getElementById("projectsMeta").textContent = `Опубликовано проектов: ${data.project_count}`;
-        document.getElementById("projectsList").innerHTML = data.projects.length
-            ? data.projects.map(projectCard).join("")
-            : `<article class="empty-card fade-up"><h3>Пока пусто</h3><p>У пользователя ещё нет опубликованных проектов.</p></article>`;
-
-        document.getElementById("topbarMeta").textContent = data.is_current_user ? "Это ваш профиль" : `Профиль @${data.user.username}`;
-
         if (data.is_current_user) {
-            document.getElementById("editPanel").style.display = "grid";
+            currentProfileIsMine = true;
+            layout.classList.remove("meridian-profile-layout-full");
+            sideColumn.style.display = "grid";
+            editPanel.style.display = "block";
             document.getElementById("fullName").value = data.user.full_name || "";
             document.getElementById("bio").value = data.user.bio || "";
             document.getElementById("photoUrl").value = data.user.photo_url || "";
@@ -325,11 +379,26 @@
             document.getElementById("roles").value = csv(data.user.roles);
             document.getElementById("links").value = csv(data.user.links);
 
-            document.getElementById("applicationsBlock").style.display = "block";
+            applicationsBlock.style.display = "block";
             document.getElementById("applicationsList").innerHTML = data.applications.length
                 ? data.applications.map(applicationCard).join("")
-                : `<article class="empty-card fade-up"><h3>Откликов пока нет</h3><p>Здесь появятся ваши заявки на чужие проекты.</p></article>`;
+                : `<div class="meridian-empty-card">Откликов пока нет. Здесь появятся ваши заявки на чужие проекты.</div>`;
+        } else {
+            currentProfileIsMine = false;
+            layout.classList.add("meridian-profile-layout-full");
+            sideColumn.style.display = "none";
+            editPanel.style.display = "none";
+            applicationsBlock.style.display = "none";
         }
+
+        fillProfile(data.user);
+        document.getElementById("projectsMetric").textContent = String(data.project_count);
+        document.getElementById("projectsMeta").textContent = `Опубликовано проектов: ${data.project_count}`;
+        document.getElementById("projectsList").innerHTML = data.projects.length
+            ? data.projects.map(projectCard).join("")
+            : `<div class="meridian-empty-card">У пользователя пока нет опубликованных проектов.</div>`;
+
+        document.getElementById("topbarMeta").textContent = data.is_current_user ? "Это ваш профиль" : `Профиль @${data.user.username}`;
     }
 
     function parseCSV(value) {
@@ -338,9 +407,7 @@
 
     document.getElementById("photoFile").addEventListener("change", (event) => {
         const file = event.target.files && event.target.files[0];
-        if (!file) {
-            return;
-        }
+        if (!file) return;
         if (!allowedPhotoTypes.has(file.type)) {
             document.getElementById("photoUploadMeta").textContent = "Поддерживаются только JPG, PNG, WEBP и GIF.";
             event.target.value = "";
@@ -356,20 +423,11 @@
         const meta = document.getElementById("photoUploadMeta");
         const message = document.getElementById("formMessage");
 
-        if (!file) {
-            meta.textContent = "Сначала выбери файл.";
-            return;
-        }
-        if (!allowedPhotoTypes.has(file.type)) {
-            meta.textContent = "Поддерживаются только JPG, PNG, WEBP и GIF.";
-            return;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-            meta.textContent = "Файл слишком большой. Нужен размер до 5 МБ.";
-            return;
-        }
+        if (!file) { meta.textContent = "Сначала выбери файл."; return; }
+        if (!allowedPhotoTypes.has(file.type)) { meta.textContent = "Поддерживаются только JPG, PNG, WEBP и GIF."; return; }
+        if (file.size > 5 * 1024 * 1024) { meta.textContent = "Файл слишком большой. Нужен размер до 5 МБ."; return; }
 
-        meta.textContent = "Загружаем фото...";
+        meta.textContent = "Загружаем фото…";
         message.textContent = "";
         message.className = "message";
 
@@ -378,11 +436,7 @@
             const response = await window.authFetch(`${API}/api/profile/me/photo`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    file_name: file.name,
-                    mime_type: file.type,
-                    content_base64: contentBase64
-                })
+                body: JSON.stringify({ file_name: file.name, mime_type: file.type, content_base64: contentBase64 })
             });
             const data = await response.json().catch(() => ({}));
 
@@ -405,6 +459,33 @@
             message.textContent = "Ошибка при загрузке фото.";
             message.classList.add("message-error");
         }
+    });
+
+    document.getElementById("removePhotoBtn").addEventListener("click", async () => {
+        const meta = document.getElementById("photoUploadMeta");
+        const message = document.getElementById("formMessage");
+        message.textContent = "";
+        message.className = "message";
+
+        const response = await window.authFetch(`${API}/api/profile/me/photo`, {
+            method: "DELETE",
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            meta.textContent = data.detail || "Не удалось убрать фото.";
+            message.textContent = data.detail || "Не удалось убрать фото.";
+            message.classList.add("message-error");
+            return;
+        }
+
+        revokeDraftPhoto();
+        document.getElementById("photoFile").value = "";
+        document.getElementById("photoUrl").value = "";
+        meta.textContent = "Фото убрано. Можно загрузить новое.";
+        message.textContent = "Фото профиля удалено.";
+        message.classList.add("message-success");
+        renderProfilePhoto(data.user);
     });
 
     document.getElementById("profileForm").addEventListener("submit", async (event) => {
@@ -435,7 +516,7 @@
             return;
         }
 
-        message.textContent = "Профиль обновлён.";
+        message.textContent = "Профиль сохранён.";
         message.classList.add("message-success");
         loadProfile();
     });

@@ -1,87 +1,121 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Создать проект</title>
+    <title>Новый проект</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/theme.css">
 </head>
 <body>
-<header class="topbar">
-    <div class="topbar-row">
-        <div class="brand-lockup">
-            <div class="brand-mark">SP</div>
-            <div class="brand-copy">
-                <strong>Create Project</strong>
-                <span>Публикация новой карточки проекта для каталога</span>
+<header class="topbar meridian-topbar">
+    <div class="topbar-row meridian-topbar-row">
+        <div class="meridian-brand">
+            <div class="meridian-brand-mark">
+                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect x="1" y="1" width="5" height="5" rx="1" fill="white"/>
+                    <rect x="8" y="1" width="5" height="5" rx="1" fill="white" opacity=".55"/>
+                    <rect x="1" y="8" width="5" height="5" rx="1" fill="white" opacity=".55"/>
+                    <rect x="8" y="8" width="5" height="5" rx="1" fill="white" opacity=".28"/>
+                </svg>
+            </div>
+            <div class="meridian-brand-copy">
+                <strong>StudCollab</strong>
+                <span>Публикация новой карточки проекта</span>
             </div>
         </div>
-        <div class="topbar-actions">
-            <a class="button-link" href="/">Каталог</a>
+
+        <div class="meridian-topbar-actions">
             <div id="notificationsHost"></div>
-            <a class="button-link" id="profileLink" href="/profile/me">Профиль</a>
+            <a class="meridian-btn meridian-btn-ghost" href="/">Каталог</a>
+            <a class="meridian-btn meridian-btn-ghost" href="/profile/me" id="profileLink">Профиль</a>
         </div>
     </div>
 </header>
 
-<main class="app-shell">
-    <section class="hero fade-up">
-        <div class="hero-card">
-            <div class="eyebrow">Publish Project</div>
-            <h1 class="hero-title">Оформи проект как сильную публичную карточку для поиска команды.</h1>
-            <p class="hero-text">
-                Коротко и ясно опиши идею, стадию проекта, роли, стек и контакты.
-                После публикации карточка сразу появится в каталоге и станет доступна для откликов.
-            </p>
-        </div>
+<main class="meridian-shell meridian-page">
+    <section class="meridian-page-header">
+        <div class="meridian-section-label">Новый проект</div>
+        <h1 class="meridian-page-title">Опиши инициативу так, чтобы команда сразу поняла задачу, стек и роли.</h1>
+        <p class="meridian-page-subtitle">
+            Здесь важны ясность и конкретика: что уже собрано, кого ищешь, как откликаться и какие материалы можно посмотреть до первого контакта.
+        </p>
     </section>
 
-    <section class="catalog-shell">
-        <section class="section-card fade-up">
-            <div class="section-title-row">
+    <section class="meridian-page-grid meridian-page-grid-wide-aside">
+        <section class="meridian-panel">
+            <div class="meridian-panel-head">
                 <div>
-                    <h2>Новый проект</h2>
-                    <p class="section-subtitle">Заполни карточку проекта. Поля про GitHub и demo можно оставить пустыми.</p>
+                    <div class="meridian-content-title">Карточка проекта</div>
+                    <div class="meridian-content-sub">После публикации проект сразу появится в каталоге и станет доступен для откликов.</div>
                 </div>
             </div>
 
-            <form id="projectForm" class="project-form-grid">
-                <div class="field field-span-2">
-                    <label for="title">Название проекта</label>
-                    <input class="control" id="title" type="text" required placeholder="HSE Study Buddy">
-                </div>
-                <div class="field field-span-2">
-                    <label for="description">Описание</label>
-                    <textarea class="control-area" id="description" required placeholder="Что это за проект, на какой он стадии и кто нужен в команду?"></textarea>
-                </div>
-                <div class="field">
-                    <label for="tags">Теги</label>
-                    <input class="control" id="tags" type="text" placeholder="fastapi, ai, hackathon">
-                </div>
-                <div class="field">
-                    <label for="roles">Требуемые роли</label>
-                    <input class="control" id="roles" type="text" placeholder="backend, frontend, design">
-                </div>
-                <div class="field">
-                    <label for="githubUrl">GitHub</label>
-                    <input class="control" id="githubUrl" type="text" placeholder="https://github.com/...">
-                </div>
-                <div class="field">
-                    <label for="demoUrl">Demo</label>
-                    <input class="control" id="demoUrl" type="text" placeholder="https://...">
-                </div>
-                <div class="field field-span-2">
-                    <label for="contactInfo">Контакты</label>
-                    <textarea class="control-area" id="contactInfo" placeholder="Telegram, email, Discord или инструкция по отклику."></textarea>
+            <form id="projectForm" class="meridian-form-grid">
+                <div class="meridian-field-group meridian-field-span-2">
+                    <label class="meridian-field-label" for="title">Название</label>
+                    <input class="meridian-field-input" id="title" type="text" required placeholder="Study Buddy Platform">
                 </div>
 
-                <div class="button-row field-span-2">
-                    <button class="button button-primary" type="submit">Опубликовать проект</button>
-                    <a class="button-link" href="/">Вернуться в каталог</a>
+                <div class="meridian-field-group meridian-field-span-2">
+                    <label class="meridian-field-label" for="description">Описание</label>
+                    <textarea class="meridian-field-textarea" id="description" required placeholder="Что уже сделано, какая цель проекта, какие задачи нужно закрыть и зачем команде новые участники."></textarea>
                 </div>
-                <div class="message field-span-2" id="formMessage"></div>
+
+                <div class="meridian-field-group">
+                    <label class="meridian-field-label" for="tags">Теги</label>
+                    <input class="meridian-field-input" id="tags" type="text" placeholder="fastapi, analytics, mobile">
+                </div>
+
+                <div class="meridian-field-group">
+                    <label class="meridian-field-label" for="roles">Роли</label>
+                    <input class="meridian-field-input" id="roles" type="text" placeholder="backend, analyst, designer">
+                </div>
+
+                <div class="meridian-field-group">
+                    <label class="meridian-field-label" for="githubUrl">GitHub</label>
+                    <input class="meridian-field-input" id="githubUrl" type="text" placeholder="https://github.com/...">
+                </div>
+
+                <div class="meridian-field-group">
+                    <label class="meridian-field-label" for="demoUrl">Demo</label>
+                    <input class="meridian-field-input" id="demoUrl" type="text" placeholder="https://...">
+                </div>
+
+                <div class="meridian-field-group meridian-field-span-2">
+                    <label class="meridian-field-label" for="contactInfo">Контакты</label>
+                    <textarea class="meridian-field-textarea" id="contactInfo" placeholder="Telegram, email, Discord или инструкция по отклику."></textarea>
+                </div>
+
+                <div class="meridian-section-actions meridian-field-span-2">
+                    <button class="meridian-btn meridian-btn-solid meridian-btn-lg" type="submit">Опубликовать проект</button>
+                    <a class="meridian-btn meridian-btn-ghost meridian-btn-lg" href="/">Вернуться в каталог</a>
+                </div>
+
+                <div class="message meridian-field-span-2" id="formMessage"></div>
             </form>
         </section>
+
+        <aside class="meridian-side-panel meridian-side-panel-wide">
+            <section class="meridian-panel meridian-panel-roomy">
+                <div class="meridian-section-label">Подсказка</div>
+                <h2 class="meridian-section-title">Хорошая карточка проекта</h2>
+                <div class="meridian-section-body">
+                    Карточка отвечает на три вопроса: что вы строите, кого ищете в команду и как выглядит первый шаг после отклика.
+                </div>
+            </section>
+
+            <section class="meridian-panel meridian-panel-roomy">
+                <div class="meridian-table-title">Что стоит указать</div>
+                <div class="meridian-list">
+                    <div class="meridian-note-card meridian-note-card-roomy">Текущую стадию проекта и готовность материалов.</div>
+                    <div class="meridian-note-card meridian-note-card-roomy">Конкретные роли, а не абстрактное «ищем людей».</div>
+                    <div class="meridian-note-card meridian-note-card-roomy">Понятный контакт и ожидаемый формат связи.</div>
+                </div>
+            </section>
+        </aside>
     </section>
 </main>
 
@@ -108,7 +142,7 @@
         event.preventDefault();
         const message = document.getElementById("formMessage");
         message.textContent = "";
-        message.className = "message field-span-2";
+        message.className = "message meridian-field-span-2";
 
         const payload = {
             title: document.getElementById("title").value.trim(),

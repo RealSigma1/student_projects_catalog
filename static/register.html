@@ -1,43 +1,44 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/theme.css">
 </head>
 <body>
-<main class="auth-shell">
-    <section class="auth-card fade-up">
-        <div class="eyebrow">New Profile</div>
-        <h1 class="auth-title">Создай профиль для командной работы</h1>
-        <p class="hero-text register-hero-text">
-            После регистрации ты сможешь публиковать проекты, указывать нужные роли,
-            откликаться на инициативы и заполнять профессиональный профиль.
+<main class="meridian-auth-shell">
+    <section class="meridian-auth-card">
+        <div class="meridian-section-label">Новый профиль</div>
+        <h1 class="meridian-auth-title">Новый профиль для проектной работы</h1>
+        <p class="meridian-auth-text">
+            После регистрации ты сможешь публиковать проекты, указывать нужные роли, откликаться на инициативы и заполнять профессиональный профиль.
         </p>
 
-        <form id="registerForm" style="margin-top: 24px;">
-            <div class="field">
-                <label for="username">Username</label>
-                <input class="control" id="username" type="text" required placeholder="student42">
-                <div class="helper">Латиница, цифры, точка, дефис или подчёркивание.</div>
+        <form id="registerForm" class="meridian-auth-form">
+            <div class="meridian-field-group">
+                <label class="meridian-field-label" for="username">Username</label>
+                <input class="meridian-field-input" id="username" type="text" required placeholder="student42">
+                <div class="meridian-input-hint">Латиница, цифры, точка, дефис или подчёркивание.</div>
             </div>
-            <div class="field">
-                <label for="email">Email</label>
-                <input class="control" id="email" type="email" required placeholder="you@example.com">
+            <div class="meridian-field-group">
+                <label class="meridian-field-label" for="email">Email</label>
+                <input class="meridian-field-input" id="email" type="email" required placeholder="you@example.com">
             </div>
-            <div class="field">
-                <label for="fullName">Имя</label>
-                <input class="control" id="fullName" type="text" placeholder="Инал Шидаков">
+            <div class="meridian-field-group">
+                <label class="meridian-field-label" for="fullName">Имя</label>
+                <input class="meridian-field-input" id="fullName" type="text" placeholder="Инал Шидаков">
             </div>
-            <div class="field">
-                <label for="password">Пароль</label>
-                <input class="control" id="password" type="password" required placeholder="Минимум 8 символов">
-                <div class="helper"></div>
+            <div class="meridian-field-group">
+                <label class="meridian-field-label" for="password">Пароль</label>
+                <input class="meridian-field-input" id="password" type="password" required placeholder="Минимум 8 символов">
             </div>
-            <div class="button-row auth-actions" style="margin-top: 18px;">
-                <button class="button button-secondary" type="submit">Зарегистрироваться</button>
-                <a class="button-link" href="/login">У меня уже есть аккаунт</a>
+            <div class="meridian-auth-actions">
+                <button class="meridian-btn meridian-btn-solid meridian-btn-lg" type="submit">Зарегистрироваться</button>
+                <a class="meridian-btn meridian-btn-ghost meridian-btn-lg" href="/login">У меня уже есть аккаунт</a>
             </div>
         </form>
 
