@@ -6,6 +6,20 @@ from .config import ALLOWED_PROFILE_PHOTO_TYPES, EMAIL_RE, USERNAME_RE
 from .utils import normalize_text
 
 
+MAX_ROLE_LENGTH = 40
+
+
+def validate_role_value(value: Optional[str], *, required: bool) -> Optional[str]:
+    cleaned = normalize_text(value)
+    if not cleaned:
+        if required:
+            raise ValueError("Нужно указать роль.")
+        return None
+    if len(cleaned) > MAX_ROLE_LENGTH:
+        raise ValueError(f"Роль должна быть короткой: не длиннее {MAX_ROLE_LENGTH} символов.")
+    return cleaned
+
+
 class UserRegister(BaseModel):
     username: str
     email: str
@@ -16,22 +30,22 @@ class UserRegister(BaseModel):
     def validate_username(cls, value: str) -> str:
         cleaned = value.strip()
         if not USERNAME_RE.fullmatch(cleaned):
-            raise ValueError("Username must be 3-32 chars and use only letters, digits, dots, dashes or underscores.")
+            raise ValueError("Логин должен содержать от 3 до 32 символов: буквы, цифры, точки, дефисы или подчёркивания.")
         return cleaned
 
     @validator("email")
     def validate_email(cls, value: str) -> str:
         cleaned = value.strip().lower()
         if not EMAIL_RE.fullmatch(cleaned):
-            raise ValueError("Invalid email address.")
+            raise ValueError("Некорректный email.")
         return cleaned
 
     @validator("password")
     def validate_password(cls, value: str) -> str:
         if len(value) < 8:
-            raise ValueError("Password must contain at least 8 characters.")
+            raise ValueError("Пароль должен содержать минимум 8 символов.")
         if len(value) > 72:
-            raise ValueError("Password must not exceed 72 characters.")
+            raise ValueError("Пароль не должен превышать 72 символа.")
         return value
 
     @validator("full_name")
@@ -47,7 +61,7 @@ class UserLogin(BaseModel):
     def normalize_login(cls, value: str) -> str:
         cleaned = value.strip()
         if not cleaned:
-            raise ValueError("Login is required.")
+            raise ValueError("Логин или email обязателен.")
         return cleaned
 
 
@@ -81,14 +95,14 @@ class ProfilePhotoUpload(BaseModel):
     def validate_mime_type(cls, value: str) -> str:
         cleaned = value.strip().lower()
         if cleaned not in ALLOWED_PROFILE_PHOTO_TYPES:
-            raise ValueError("Only JPG, PNG, WEBP or GIF images are supported.")
+            raise ValueError("Поддерживаются только изображения JPG, PNG, WEBP или GIF.")
         return cleaned
 
     @validator("content_base64")
     def validate_content(cls, value: str) -> str:
         cleaned = value.strip()
         if not cleaned:
-            raise ValueError("Image content is required.")
+            raise ValueError("Необходимо передать содержимое изображения.")
         return cleaned
 
 
@@ -101,12 +115,13 @@ class ProjectPayload(BaseModel):
     demo_url: Optional[str] = None
     contact_info: Optional[str] = None
     status: Literal["active", "archived"] = "active"
+    applications_open: bool = True
 
     @validator("title", "description")
     def require_text(cls, value: str) -> str:
         cleaned = value.strip()
         if not cleaned:
-            raise ValueError("Field is required.")
+            raise ValueError("Поле обязательно.")
         return cleaned
 
     @validator("github_url", "demo_url", "contact_info")
@@ -129,9 +144,31 @@ class ApplicationCreate(BaseModel):
     def require_message(cls, value: str) -> str:
         cleaned = value.strip()
         if len(cleaned) < 10:
-            raise ValueError("Application message must be at least 10 characters long.")
+            raise ValueError("Текст отклика должен содержать минимум 10 символов.")
         return cleaned
 
 
 class ApplicationStatusUpdate(BaseModel):
-    status: Literal["new", "accepted", "rejected"]
+    status: Literal["new", "accepted", "rejected", "removed"]
+    assigned_role: Optional[str] = None
+
+    @validator("assigned_role")
+    def normalize_assigned_role(cls, value: Optional[str]) -> Optional[str]:
+        return validate_role_value(value, required=False)
+
+
+class ApplicationRoleRequest(BaseModel):
+    requested_role: str
+
+    @validator("requested_role")
+    def require_requested_role(cls, value: str) -> str:
+        return validate_role_value(value, required=True)
+
+
+class ApplicationRoleRequestDecision(BaseModel):
+    decision: Literal["approved", "rejected"]
+    assigned_role: Optional[str] = None
+
+    @validator("assigned_role")
+    def normalize_decision_role(cls, value: Optional[str]) -> Optional[str]:
+        return validate_role_value(value, required=False)

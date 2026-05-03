@@ -46,7 +46,7 @@ def mark_notification_read(
         .first()
     )
     if not notification:
-        raise HTTPException(status_code=404, detail="Notification not found.")
+        raise HTTPException(status_code=404, detail="Уведомление не найдено.")
 
     if not notification.is_read:
         notification.is_read = True
@@ -54,4 +54,7 @@ def mark_notification_read(
         db.commit()
         db.refresh(notification)
 
-    return {"message": "Notification marked as read.", "notification": serialize_notification(notification)}
+    return {
+        "message": "Уведомление отмечено как прочитанное.",
+        "notification": serialize_notification(notification),
+    }

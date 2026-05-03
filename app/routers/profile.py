@@ -48,6 +48,7 @@ def update_my_profile(
     current_user: UserModel = Depends(require_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
+    previous_photo_url = current_user.photo_url
     current_user.full_name = payload.full_name
     current_user.bio = payload.bio
     current_user.photo_url = payload.photo_url
@@ -57,7 +58,9 @@ def update_my_profile(
     db.add(current_user)
     db.commit()
     db.refresh(current_user)
-    return {"message": "Profile updated.", "user": serialize_user(current_user, include_email=True)}
+    if previous_photo_url != current_user.photo_url and not current_user.photo_url:
+        remove_local_profile_photo(previous_photo_url)
+    return {"message": "Профиль обновлён.", "user": serialize_user(current_user, include_email=True)}
 
 
 @router.post("/api/profile/me/photo")
@@ -69,10 +72,10 @@ def upload_my_profile_photo(
     try:
         raw_bytes = base64.b64decode(payload.content_base64, validate=True)
     except (ValueError, binascii.Error) as exc:
-        raise HTTPException(status_code=400, detail="Invalid image payload.") from exc
+        raise HTTPException(status_code=400, detail="Некорректные данные изображения.") from exc
 
     if len(raw_bytes) > MAX_PROFILE_PHOTO_BYTES:
-        raise HTTPException(status_code=400, detail="Image must not exceed 5 MB.")
+        raise HTTPException(status_code=400, detail="Размер изображения не должен превышать 5 МБ.")
 
     extension = ALLOWED_PROFILE_PHOTO_TYPES[payload.mime_type]
     file_name = f"user_{current_user.id}_{uuid4().hex}{extension}"
@@ -87,8 +90,25 @@ def upload_my_profile_photo(
 
     remove_local_profile_photo(previous_photo_url)
     return {
-        "message": "Profile photo uploaded.",
+        "message": "Фото профиля загружено.",
         "photo_url": current_user.photo_url,
+        "user": serialize_user(current_user, include_email=True),
+    }
+
+
+@router.delete("/api/profile/me/photo")
+def delete_my_profile_photo(
+    current_user: UserModel = Depends(require_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    previous_photo_url = current_user.photo_url
+    current_user.photo_url = None
+    db.add(current_user)
+    db.commit()
+    db.refresh(current_user)
+    remove_local_profile_photo(previous_photo_url)
+    return {
+        "message": "Фото профиля удалено.",
         "user": serialize_user(current_user, include_email=True),
     }
 
@@ -109,7 +129,7 @@ def get_public_profile(
         .first()
     )
     if not user:
-        raise HTTPException(status_code=404, detail="User not found.")
+        raise HTTPException(status_code=404, detail="Пользователь не найден.")
 
     is_current_user = bool(current_user and current_user.id == user.id)
     visible_projects = user.projects if is_current_user else [project for project in user.projects if project.status == "active"]

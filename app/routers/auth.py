@@ -26,7 +26,7 @@ def authenticate_user(login_value: str, password: str, db: Session) -> UserModel
         or_(UserModel.username == login_value, UserModel.email == login_value.lower())
     ).first()
     if not db_user or not verify_password(password, db_user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid login or password.")
+        raise HTTPException(status_code=401, detail="Неверный логин, email или пароль.")
     return db_user
 
 
@@ -38,9 +38,9 @@ def healthcheck() -> dict:
 @router.post("/api/auth/register")
 def register(user: UserRegister, db: Session = Depends(get_db)) -> dict:
     if db.query(UserModel).filter(UserModel.username == user.username).first():
-        raise HTTPException(status_code=400, detail="Username is already taken.")
+        raise HTTPException(status_code=400, detail="Этот логин уже занят.")
     if db.query(UserModel).filter(UserModel.email == user.email).first():
-        raise HTTPException(status_code=400, detail="Email is already registered.")
+        raise HTTPException(status_code=400, detail="Этот email уже зарегистрирован.")
 
     db_user = UserModel(
         username=user.username,
@@ -52,7 +52,7 @@ def register(user: UserRegister, db: Session = Depends(get_db)) -> dict:
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return {"message": "Registration successful.", "user": serialize_user(db_user, include_email=True)}
+    return {"message": "Регистрация прошла успешно.", "user": serialize_user(db_user, include_email=True)}
 
 
 @router.post("/api/auth/login")
@@ -62,7 +62,7 @@ def login(user: UserLogin, response: Response, db: Session = Depends(get_db)) ->
     access_token = create_access_token(db_user)
     set_auth_cookie(response, db_user)
     return {
-        "message": "Login successful.",
+        "message": "Вход выполнен.",
         "access_token": access_token,
         "token_type": "bearer",
         "user": serialize_user(db_user, include_email=True),
@@ -81,7 +81,7 @@ def issue_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
 @router.post("/api/auth/logout")
 def logout(response: Response) -> dict:
     clear_auth_cookie(response)
-    return {"message": "Logout successful."}
+    return {"message": "Выход выполнен."}
 
 
 @router.get("/api/me")

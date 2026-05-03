@@ -37,6 +37,7 @@ class ProjectModel(Base):
     demo_url = Column(String)
     contact_info = Column(Text)
     status = Column(String, default="active", nullable=False)
+    applications_open = Column(Boolean, default=True, nullable=False)
     created_at = Column(String, default=utc_now_iso, nullable=False)
     updated_at = Column(String, default=utc_now_iso, nullable=False)
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
@@ -54,6 +55,8 @@ class ApplicationModel(Base):
     applicant_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     message = Column(Text, nullable=False)
     status = Column(String, default="new", nullable=False)
+    assigned_role = Column(String)
+    requested_role = Column(String)
     created_at = Column(String, default=utc_now_iso, nullable=False)
 
     project = relationship("ProjectModel", back_populates="applications")

@@ -44,6 +44,7 @@ def ensure_database_schema() -> None:
                 "required_roles": "TEXT",
                 "contact_info": "TEXT",
                 "status": "TEXT",
+                "applications_open": "INTEGER",
                 "created_at": "TEXT",
                 "updated_at": "TEXT",
             }
@@ -51,6 +52,7 @@ def ensure_database_schema() -> None:
                 if column_name not in project_columns:
                     cursor.execute(f"ALTER TABLE projects ADD COLUMN {column_name} {column_type}")
             cursor.execute("UPDATE projects SET status = 'active' WHERE status IS NULL OR TRIM(status) = ''")
+            cursor.execute("UPDATE projects SET applications_open = 1 WHERE applications_open IS NULL")
             cursor.execute(
                 "UPDATE projects SET created_at = ? WHERE created_at IS NULL OR TRIM(created_at) = ''",
                 (now,),
@@ -79,6 +81,16 @@ def ensure_database_schema() -> None:
                 "UPDATE notifications SET created_at = ? WHERE created_at IS NULL OR TRIM(created_at) = ''",
                 (now,),
             )
+
+        if "applications" in tables:
+            application_columns = {row[1] for row in cursor.execute("PRAGMA table_info(applications)")}
+            additions = {
+                "assigned_role": "TEXT",
+                "requested_role": "TEXT",
+            }
+            for column_name, column_type in additions.items():
+                if column_name not in application_columns:
+                    cursor.execute(f"ALTER TABLE applications ADD COLUMN {column_name} {column_type}")
 
         conn.commit()
     finally:

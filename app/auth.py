@@ -52,17 +52,17 @@ def decode_access_token(token: str) -> dict:
     try:
         encoded_header, encoded_payload, encoded_signature = token.split(".")
     except ValueError as exc:
-        raise HTTPException(status_code=401, detail="Invalid authentication token.") from exc
+        raise HTTPException(status_code=401, detail="Некорректный токен авторизации.") from exc
 
     signing_input = f"{encoded_header}.{encoded_payload}"
     expected_signature = hmac.new(SECRET_KEY.encode("utf-8"), signing_input.encode("utf-8"), hashlib.sha256).digest()
     received_signature = b64url_decode(encoded_signature)
     if not hmac.compare_digest(expected_signature, received_signature):
-        raise HTTPException(status_code=401, detail="Invalid authentication token.")
+        raise HTTPException(status_code=401, detail="Некорректный токен авторизации.")
 
     payload = json.loads(b64url_decode(encoded_payload).decode("utf-8"))
     if int(payload.get("exp", 0)) < int(datetime.now(timezone.utc).timestamp()):
-        raise HTTPException(status_code=401, detail="Authentication token has expired.")
+        raise HTTPException(status_code=401, detail="Срок действия токена истёк.")
     return payload
 
 
@@ -100,5 +100,5 @@ def get_current_user(
 
 def require_current_user(current_user: Optional[UserModel] = Depends(get_current_user)) -> UserModel:
     if not current_user:
-        raise HTTPException(status_code=401, detail="Authentication required.")
+        raise HTTPException(status_code=401, detail="Требуется авторизация.")
     return current_user

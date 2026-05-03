@@ -6,6 +6,7 @@ from .config import BASE_DIR, MEDIA_DIR
 from .database import init_db
 from .errors import validation_exception_handler
 from .routers.auth import router as auth_router
+from .routers.dashboard import router as dashboard_router
 from .routers.notifications import router as notifications_router
 from .routers.pages import router as pages_router
 from .routers.profile import router as profile_router
@@ -22,6 +23,7 @@ def create_app() -> FastAPI:
     app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
     app.include_router(auth_router)
+    app.include_router(dashboard_router)
     app.include_router(notifications_router)
     app.include_router(profile_router)
     app.include_router(projects_router)
