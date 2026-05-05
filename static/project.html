@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проект — StudCollab</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -15,12 +16,7 @@
     <div class="topbar-row meridian-topbar-row">
         <div class="meridian-brand">
             <div class="meridian-brand-mark">
-                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <rect x="1" y="1" width="5" height="5" rx="1" fill="white"/>
-                    <rect x="8" y="1" width="5" height="5" rx="1" fill="white" opacity=".55"/>
-                    <rect x="1" y="8" width="5" height="5" rx="1" fill="white" opacity=".55"/>
-                    <rect x="8" y="8" width="5" height="5" rx="1" fill="white" opacity=".28"/>
-                </svg>
+                <img src="/static/studcollab-logo.png" alt="Логотип StudCollab">
             </div>
             <div class="meridian-brand-copy">
                 <strong>StudCollab</strong>
@@ -38,7 +34,6 @@
 
 <main class="meridian-shell meridian-page">
 
-    <!-- Hero: карточка проекта -->
     <section class="meridian-page-header fade-up">
         <div class="meridian-section-label">Проект</div>
         <h1 class="meridian-page-title" id="title">Загрузка проекта…</h1>
@@ -53,13 +48,10 @@
         </div>
     </section>
 
-    <!-- Основная сетка -->
     <div class="meridian-page-grid">
 
-        <!-- Основной контент -->
         <section class="meridian-content-col">
 
-            <!-- Материалы -->
             <section class="meridian-panel fade-up">
                 <div class="meridian-panel-head">
                     <div>
@@ -70,7 +62,6 @@
                 <div class="meridian-list" id="linksBlock"></div>
             </section>
 
-            <!-- Форма отклика -->
             <section class="meridian-panel fade-up" id="applyBlock" style="display:none;">
                 <div class="meridian-panel-head">
                     <div>
@@ -90,7 +81,6 @@
                 </form>
             </section>
 
-            <!-- Мой отклик -->
             <section class="meridian-panel fade-up" id="myApplicationBlock" style="display:none;">
                 <div class="meridian-panel-head">
                     <div class="meridian-content-title">Мой отклик</div>
@@ -98,7 +88,6 @@
                 <div id="myApplicationCard"></div>
             </section>
 
-            <!-- Отклики (для владельца) -->
             <section class="meridian-panel fade-up" id="ownerApplicationsBlock" style="display:none;">
                 <div class="meridian-panel-head">
                     <div>
@@ -110,7 +99,6 @@
             </section>
         </section>
 
-        <!-- Боковая панель: управление проектом (только для владельца) -->
         <aside id="ownerPanel" style="display:none;">
             <section class="meridian-panel fade-up">
                 <div class="meridian-panel-head">

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudCollab</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -14,12 +15,7 @@
     <div class="topbar-row meridian-topbar-row">
         <div class="meridian-brand">
             <div class="meridian-brand-mark">
-                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <rect x="1" y="1" width="5" height="5" rx="1" fill="white"/>
-                    <rect x="8" y="1" width="5" height="5" rx="1" fill="white" opacity=".55"/>
-                    <rect x="1" y="8" width="5" height="5" rx="1" fill="white" opacity=".55"/>
-                    <rect x="8" y="8" width="5" height="5" rx="1" fill="white" opacity=".28"/>
-                </svg>
+                <img src="/static/studcollab-logo.png" alt="Логотип StudCollab">
             </div>
             <div class="meridian-brand-copy">
                 <strong>StudCollab</strong>
@@ -106,24 +102,6 @@
 
     <div class="meridian-main">
         <aside class="meridian-sidebar">
-            <div class="meridian-sidebar-section">
-                <div class="meridian-sidebar-label">Навигация</div>
-                <a class="meridian-sidebar-item active" href="#overview">
-                    <span class="meridian-sidebar-dot"></span>
-                    Обзор
-                </a>
-                <a class="meridian-sidebar-item" href="#catalog">
-                    <span class="meridian-sidebar-dot"></span>
-                    Проекты
-                    <span class="meridian-sidebar-count" id="sidebarProjectsCount">0</span>
-                </a>
-                <a class="meridian-sidebar-item" href="#applications">
-                    <span class="meridian-sidebar-dot"></span>
-                    Заявки
-                    <span class="meridian-sidebar-count" id="sidebarApplicationsCount">0</span>
-                </a>
-            </div>
-
             <div class="meridian-sidebar-section">
                 <div class="meridian-sidebar-label">Команда</div>
                 <div class="meridian-sidebar-team" id="sidebarTeam">
@@ -556,8 +534,14 @@
         document.getElementById("statCatalogProjects").textContent = String(data.metrics.catalog_active_projects);
         document.getElementById("statNotificationsMeta").textContent = `Непрочитанных уведомлений: ${data.metrics.notifications_unread}`;
 
-        document.getElementById("sidebarProjectsCount").textContent = String(data.sidebar_counts.projects);
-        document.getElementById("sidebarApplicationsCount").textContent = String(data.sidebar_counts.applications);
+        const sidebarProjectsCount = document.getElementById("sidebarProjectsCount");
+        const sidebarApplicationsCount = document.getElementById("sidebarApplicationsCount");
+        if (sidebarProjectsCount) {
+            sidebarProjectsCount.textContent = String(data.sidebar_counts.projects);
+        }
+        if (sidebarApplicationsCount) {
+            sidebarApplicationsCount.textContent = String(data.sidebar_counts.applications);
+        }
 
         document.getElementById("overviewSubtitle").textContent =
             `Сейчас у тебя ${data.metrics.my_projects_total} проектов, ${data.metrics.incoming_applications_new} новых откликов и ${data.metrics.notifications_unread} непрочитанных уведомлений.`;
@@ -648,20 +632,32 @@
             })
             .filter(Boolean);
 
-        const anchorLine = 160;
-        const inViewSection = sections.find((section) => {
-            const rect = section.element.getBoundingClientRect();
-            return rect.top <= anchorLine && rect.bottom > anchorLine;
-        });
+        const applicationsSection = document.querySelector("#applications");
+        const viewportBottom = window.scrollY + window.innerHeight;
+        const documentBottom = document.documentElement.scrollHeight;
+        const isNearPageBottom = viewportBottom >= documentBottom - 24;
 
-        if (inViewSection) {
-            setActiveNavLink(inViewSection.hash);
+        if (applicationsSection && isNearPageBottom) {
+            const rect = applicationsSection.getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+                setActiveNavLink("#applications");
+                return;
+            }
+        }
+
+        const passedSection = sections.reduce((current, section) => {
+            const rect = section.element.getBoundingClientRect();
+            return rect.top <= 220 ? section : current;
+        }, null);
+
+        if (passedSection) {
+            setActiveNavLink(passedSection.hash);
             return;
         }
 
         const nearestSection = sections.reduce((best, section) => {
             const rect = section.element.getBoundingClientRect();
-            const distance = Math.abs(rect.top - anchorLine);
+            const distance = Math.abs(rect.top - 220);
             if (!best || distance < best.distance) {
                 return { hash: section.hash, distance };
             }

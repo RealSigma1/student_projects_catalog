@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль — StudCollab</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -15,12 +16,7 @@
     <div class="topbar-row meridian-topbar-row">
         <div class="meridian-brand">
             <div class="meridian-brand-mark">
-                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <rect x="1" y="1" width="5" height="5" rx="1" fill="white"/>
-                    <rect x="8" y="1" width="5" height="5" rx="1" fill="white" opacity=".55"/>
-                    <rect x="1" y="8" width="5" height="5" rx="1" fill="white" opacity=".55"/>
-                    <rect x="8" y="8" width="5" height="5" rx="1" fill="white" opacity=".28"/>
-                </svg>
+                <img src="/static/studcollab-logo.png" alt="Логотип StudCollab">
             </div>
             <div class="meridian-brand-copy">
                 <strong>StudCollab</strong>
@@ -38,7 +34,6 @@
 
 <main class="meridian-shell">
 
-    <!-- Hero: профиль -->
     <section class="meridian-hero fade-up">
         <div class="meridian-hero-inner meridian-profile-hero">
             <div class="meridian-profile-hero-copy">
@@ -73,10 +68,8 @@
         </div>
     </section>
 
-    <!-- Основная сетка -->
     <div class="meridian-page-grid meridian-profile-layout">
 
-        <!-- Левая колонка: редактирование + отклики -->
         <aside class="meridian-profile-side" id="profileSideColumn" style="display:none;">
             <section class="meridian-panel fade-up" id="editPanel" style="display:none;">
                 <div class="meridian-panel-head">
@@ -143,7 +136,6 @@
             </section>
         </aside>
 
-        <!-- Правая колонка: проекты -->
         <section class="meridian-content-col meridian-profile-projects">
 
             <section class="meridian-panel fade-up">
@@ -170,9 +162,22 @@
     let currentProfileIsMine = false;
     const allowedPhotoTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/gif"]);
 
+    function ensureList(value) {
+        if (Array.isArray(value)) {
+            return value.filter(Boolean);
+        }
+        if (typeof value === "string") {
+            return value
+                .split(",")
+                .map(item => item.trim())
+                .filter(Boolean);
+        }
+        return [];
+    }
+
     function csv(value) {
-        if (!value || !value.length) return "";
-        return value.join(", ");
+        const items = ensureList(value);
+        return items.length ? items.join(", ") : "";
     }
 
     function formatDate(value) {
@@ -345,60 +350,72 @@
         const chips = [];
         chips.push(`<span class="meridian-chip meridian-chip-muted">@${escapeHtml(user.username)}</span>`);
         if (user.email) chips.push(`<span class="meridian-chip meridian-chip-muted">${escapeHtml(user.email)}</span>`);
-        (user.skills || []).forEach(s => chips.push(`<span class="meridian-chip">${escapeHtml(s)}</span>`));
-        (user.roles || []).forEach(r => chips.push(`<span class="meridian-chip meridian-chip-role">${escapeHtml(r)}</span>`));
-        (user.links || []).forEach(l => chips.push(`<a class="meridian-btn meridian-btn-ghost" target="_blank" href="${escapeHtml(l)}">Ссылка ↗</a>`));
+        ensureList(user.skills).forEach(s => chips.push(`<span class="meridian-chip">${escapeHtml(s)}</span>`));
+        ensureList(user.roles).forEach(r => chips.push(`<span class="meridian-chip meridian-chip-role">${escapeHtml(r)}</span>`));
+        ensureList(user.links).forEach(l => chips.push(`<a class="meridian-btn meridian-btn-ghost" target="_blank" href="${escapeHtml(l)}">Ссылка ↗</a>`));
         document.getElementById("profileChips").innerHTML = chips.join("");
     }
 
     async function loadProfile() {
-        const isMine = username === "me";
-        const url = isMine ? `${API}/api/profile/me` : `${API}/api/profile/${username}`;
-        const response = await window.authFetch(url);
-        const data = await response.json();
-        const layout = document.querySelector(".meridian-profile-layout");
-        const sideColumn = document.getElementById("profileSideColumn");
-        const editPanel = document.getElementById("editPanel");
-        const applicationsBlock = document.getElementById("applicationsBlock");
+        try {
+            const isMine = username === "me";
+            const url = isMine ? `${API}/api/profile/me` : `${API}/api/profile/${username}`;
+            const response = await window.authFetch(url);
+            const data = await response.json().catch(() => ({}));
+            const layout = document.querySelector(".meridian-profile-layout");
+            const sideColumn = document.getElementById("profileSideColumn");
+            const editPanel = document.getElementById("editPanel");
+            const applicationsBlock = document.getElementById("applicationsBlock");
 
-        if (!response.ok) {
-            document.getElementById("profileTitle").textContent = "Профиль не найден";
-            document.getElementById("profileBio").textContent = data.detail || "Не удалось загрузить пользователя.";
-            return;
+            if (!response.ok) {
+                document.getElementById("profileTitle").textContent = "Профиль не найден";
+                document.getElementById("profileBio").textContent = data.detail || "Не удалось загрузить пользователя.";
+                return;
+            }
+
+            const user = data.user || {};
+            const projects = Array.isArray(data.projects) ? data.projects : [];
+            const applications = Array.isArray(data.applications) ? data.applications : [];
+            const projectCount = Number.isFinite(Number(data.project_count)) ? Number(data.project_count) : projects.length;
+
+            if (data.is_current_user) {
+                currentProfileIsMine = true;
+                layout.classList.remove("meridian-profile-layout-full");
+                sideColumn.style.display = "grid";
+                editPanel.style.display = "block";
+                document.getElementById("fullName").value = user.full_name || "";
+                document.getElementById("bio").value = user.bio || "";
+                document.getElementById("photoUrl").value = user.photo_url || "";
+                document.getElementById("skills").value = csv(user.skills);
+                document.getElementById("roles").value = csv(user.roles);
+                document.getElementById("links").value = csv(user.links);
+
+                applicationsBlock.style.display = "block";
+                document.getElementById("applicationsList").innerHTML = applications.length
+                    ? applications.map(applicationCard).join("")
+                    : `<div class="meridian-empty-card">Откликов пока нет. Здесь появятся ваши заявки на чужие проекты.</div>`;
+            } else {
+                currentProfileIsMine = false;
+                layout.classList.add("meridian-profile-layout-full");
+                sideColumn.style.display = "none";
+                editPanel.style.display = "none";
+                applicationsBlock.style.display = "none";
+            }
+
+            fillProfile(user);
+            document.getElementById("projectsMetric").textContent = String(projectCount);
+            document.getElementById("projectsMeta").textContent = `Опубликовано проектов: ${projectCount}`;
+            document.getElementById("projectsList").innerHTML = projects.length
+                ? projects.map(projectCard).join("")
+                : `<div class="meridian-empty-card">У пользователя пока нет опубликованных проектов.</div>`;
+
+            document.getElementById("topbarMeta").textContent = data.is_current_user ? "Это ваш профиль" : `Профиль @${user.username || ""}`;
+        } catch (error) {
+            document.getElementById("profileTitle").textContent = "Не удалось загрузить профиль";
+            document.getElementById("profileBio").textContent = error instanceof Error
+                ? error.message
+                : "Во время загрузки профиля произошла ошибка.";
         }
-
-        if (data.is_current_user) {
-            currentProfileIsMine = true;
-            layout.classList.remove("meridian-profile-layout-full");
-            sideColumn.style.display = "grid";
-            editPanel.style.display = "block";
-            document.getElementById("fullName").value = data.user.full_name || "";
-            document.getElementById("bio").value = data.user.bio || "";
-            document.getElementById("photoUrl").value = data.user.photo_url || "";
-            document.getElementById("skills").value = csv(data.user.skills);
-            document.getElementById("roles").value = csv(data.user.roles);
-            document.getElementById("links").value = csv(data.user.links);
-
-            applicationsBlock.style.display = "block";
-            document.getElementById("applicationsList").innerHTML = data.applications.length
-                ? data.applications.map(applicationCard).join("")
-                : `<div class="meridian-empty-card">Откликов пока нет. Здесь появятся ваши заявки на чужие проекты.</div>`;
-        } else {
-            currentProfileIsMine = false;
-            layout.classList.add("meridian-profile-layout-full");
-            sideColumn.style.display = "none";
-            editPanel.style.display = "none";
-            applicationsBlock.style.display = "none";
-        }
-
-        fillProfile(data.user);
-        document.getElementById("projectsMetric").textContent = String(data.project_count);
-        document.getElementById("projectsMeta").textContent = `Опубликовано проектов: ${data.project_count}`;
-        document.getElementById("projectsList").innerHTML = data.projects.length
-            ? data.projects.map(projectCard).join("")
-            : `<div class="meridian-empty-card">У пользователя пока нет опубликованных проектов.</div>`;
-
-        document.getElementById("topbarMeta").textContent = data.is_current_user ? "Это ваш профиль" : `Профиль @${data.user.username}`;
     }
 
     function parseCSV(value) {
@@ -522,8 +539,12 @@
     });
 
     window.addEventListener("load", () => {
-        if (window.initNotifications) {
-            window.initNotifications({ hostId: "notificationsHost" });
+        try {
+            if (window.initNotifications) {
+                window.initNotifications({ hostId: "notificationsHost" });
+            }
+        } catch (error) {
+            console.error("Notifications init failed", error);
         }
         loadProfile();
     });

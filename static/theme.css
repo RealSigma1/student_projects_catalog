@@ -1,21 +1,4 @@
-/* ============================================================
-   MERIDIAN DESIGN SYSTEM
-   Строгий, современный, лаконичный
-   ============================================================ */
-
-/* ------------------------------------------------------------
-   ШРИФТЫ (подключить в <head>)
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-   ------------------------------------------------------------ */
-
-/* ------------------------------------------------------------
-   ТОКЕНЫ
-   ------------------------------------------------------------ */
-
-:root {
-    /* Нейтральная шкала */
+﻿:root {
     --c0: #0a0a09;
     --c1: #1a1a18;
     --c2: #2e2e2b;
@@ -27,12 +10,10 @@
     --c8: #fafaf7;
     --c9: #ffffff;
 
-    /* Акцент */
     --gold:      #c9a84c;
     --gold-dim:  #a8863a;
     --gold-pale: #f5edd8;
 
-    /* Семантические */
     --success:      #2d7a4f;
     --success-soft: #e8f5ed;
     --warning:      #a06018;
@@ -40,32 +21,23 @@
     --danger:       #b83030;
     --danger-soft:  #fbeaea;
 
-    /* Типографика */
     --serif: 'Syne', sans-serif;
     --sans:  'DM Sans', sans-serif;
 
-    /* Скругления */
     --r4:  4px;
     --r8:  8px;
     --r12: 12px;
     --r16: 16px;
     --r24: 24px;
 
-    /* Тени */
     --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
     --shadow-md: 0 4px 16px rgba(0,0,0,.06), 0 1px 4px rgba(0,0,0,.04);
     --shadow-lg: 0 8px 32px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.04);
 
-    /* Контент */
     --content-width: min(1180px, calc(100% - 48px));
 
-    /* Переходы */
     --t: .15s ease;
 }
-
-/* ------------------------------------------------------------
-   СБРОС
-   ------------------------------------------------------------ */
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -103,10 +75,6 @@ a {
     text-decoration: none;
 }
 
-/* ------------------------------------------------------------
-   МАКЕТ
-   ------------------------------------------------------------ */
-
 .app-shell {
     width: var(--content-width);
     margin: 0 auto;
@@ -135,10 +103,6 @@ a {
     gap: 20px;
 }
 
-/* ------------------------------------------------------------
-   НАВБАР
-   ------------------------------------------------------------ */
-
 .topbar {
     position: sticky;
     top: 0;
@@ -158,7 +122,6 @@ a {
     gap: 16px;
 }
 
-/* Бренд */
 .brand-lockup {
     display: flex;
     align-items: center;
@@ -191,7 +154,6 @@ a {
     color: var(--c4);
 }
 
-/* Навигационные ссылки */
 .topbar-nav {
     display: flex;
     align-items: center;
@@ -221,16 +183,11 @@ a {
     font-weight: 500;
 }
 
-/* Действия в шапке */
 .topbar-actions {
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
-/* ------------------------------------------------------------
-   САЙДБАР
-   ------------------------------------------------------------ */
 
 .sidebar {
     border-right: 1px solid var(--c6);
@@ -298,10 +255,6 @@ a {
     border-radius: 99px;
 }
 
-/* ------------------------------------------------------------
-   ГЕРО
-   ------------------------------------------------------------ */
-
 .hero {
     padding: 64px 0 56px;
     border-bottom: 1px solid var(--c6);
@@ -316,7 +269,6 @@ a {
     box-shadow: var(--shadow-md);
 }
 
-/* Профиль-геро */
 .profile-hero-card {
     border: 1px solid var(--c6);
     border-radius: var(--r24);
@@ -341,7 +293,6 @@ a {
     min-height: 320px;
 }
 
-/* Надпись-eyebrow */
 .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -362,7 +313,6 @@ a {
     display: block;
 }
 
-/* Заголовок */
 .hero-title {
     font-family: var(--serif);
     font-weight: 800;
@@ -390,7 +340,6 @@ a {
     word-break: break-word;
 }
 
-/* Метрики */
 .hero-metrics {
     display: flex;
     gap: 32px;
@@ -420,10 +369,6 @@ a {
     font-weight: 400;
     letter-spacing: 0.03em;
 }
-
-/* ------------------------------------------------------------
-   КНОПКИ
-   ------------------------------------------------------------ */
 
 .button,
 .button-link {
@@ -457,7 +402,6 @@ a {
     cursor: not-allowed;
 }
 
-/* Варианты */
 .button-primary,
 .button-link.button-primary {
     background: var(--c0);
@@ -507,7 +451,6 @@ a {
     color: var(--danger);
 }
 
-/* Размеры */
 .button-sm {
     padding: 5px 12px;
     min-height: 30px;
@@ -528,10 +471,6 @@ a {
     gap: 8px;
     flex-wrap: wrap;
 }
-
-/* ------------------------------------------------------------
-   КАРТОЧКИ СЕКЦИЙ
-   ------------------------------------------------------------ */
 
 .section-card {
     background: var(--c9);
@@ -589,10 +528,6 @@ a {
     line-height: 1.6;
     margin-top: 2px;
 }
-
-/* ------------------------------------------------------------
-   КАРТОЧКИ ПРОЕКТОВ
-   ------------------------------------------------------------ */
 
 .card-grid {
     display: grid;
@@ -673,10 +608,6 @@ a {
     color: var(--c4);
 }
 
-/* ------------------------------------------------------------
-   ТАБЛИЦЫ
-   ------------------------------------------------------------ */
-
 .table-card {
     background: var(--c9);
     border: 1px solid var(--c6);
@@ -743,10 +674,6 @@ tbody tr:hover td {
     margin-top: 1px;
 }
 
-/* ------------------------------------------------------------
-   ФОРМЫ
-   ------------------------------------------------------------ */
-
 .field {
     display: grid;
     gap: 5px;
@@ -805,7 +732,6 @@ tbody tr:hover td {
     line-height: 1.5;
 }
 
-/* Сетка формы */
 .project-form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -815,10 +741,6 @@ tbody tr:hover td {
 .field-span-2 {
     grid-column: 1 / -1;
 }
-
-/* ------------------------------------------------------------
-   ЧИПЫ И ПИЛЮЛИ
-   ------------------------------------------------------------ */
 
 .chip-row,
 .chips {
@@ -867,7 +789,6 @@ tbody tr:hover td {
     color: var(--c4);
 }
 
-/* Статусные пилюли */
 .pill {
     display: inline-flex;
     align-items: center;
@@ -889,7 +810,6 @@ tbody tr:hover td {
 .status-new,
 .status-archived  { background: var(--c7);           color: var(--c4);      }
 
-/* Точечный статус */
 .status {
     display: inline-flex;
     align-items: center;
@@ -912,10 +832,6 @@ tbody tr:hover td {
 .status-warn::before { background: var(--warning); }
 .status-idle { color: var(--c4); }
 .status-idle::before { background: var(--c5); }
-
-/* ------------------------------------------------------------
-   УВЕДОМЛЕНИЯ
-   ------------------------------------------------------------ */
 
 .notification-host {
     position: relative;
@@ -1078,10 +994,6 @@ tbody tr:hover td {
     color: var(--c4);
 }
 
-/* ------------------------------------------------------------
-   АВАТАР
-   ------------------------------------------------------------ */
-
 .avatar {
     display: inline-flex;
     align-items: center;
@@ -1106,10 +1018,6 @@ tbody tr:hover td {
 .avatar-circle {
     border-radius: 50%;
 }
-
-/* ------------------------------------------------------------
-   АУТЕНТИФИКАЦИЯ
-   ------------------------------------------------------------ */
 
 .auth-shell {
     min-height: 100vh;
@@ -1160,10 +1068,6 @@ tbody tr:hover td {
     text-underline-offset: 2px;
 }
 
-/* ------------------------------------------------------------
-   ФИЛЬТРЫ КАТАЛОГА
-   ------------------------------------------------------------ */
-
 .catalog-filters {
     display: flex;
     align-items: center;
@@ -1171,10 +1075,6 @@ tbody tr:hover td {
     flex-wrap: wrap;
     margin-bottom: 16px;
 }
-
-/* ------------------------------------------------------------
-   ПАГИНАЦИЯ
-   ------------------------------------------------------------ */
 
 .pager {
     display: flex;
@@ -1190,10 +1090,6 @@ tbody tr:hover td {
     margin-right: auto;
 }
 
-/* ------------------------------------------------------------
-   СООБЩЕНИЯ / ОШИБКИ
-   ------------------------------------------------------------ */
-
 .message {
     font-size: 13px;
     line-height: 1.5;
@@ -1204,10 +1100,6 @@ tbody tr:hover td {
 .message-error   { color: var(--danger);  }
 .message-warning { color: var(--warning); }
 
-/* ------------------------------------------------------------
-   УТИЛИТЫ
-   ------------------------------------------------------------ */
-
 .muted { color: var(--c4); }
 .text-sm { font-size: 13px; }
 .text-xs { font-size: 11px; }
@@ -1217,14 +1109,12 @@ tbody tr:hover td {
 .font-bold { font-weight: 700; }
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* Разделитель */
 .divider {
     height: 1px;
     background: var(--c6);
     margin: 0;
 }
 
-/* Скрыть визуально (доступность) */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -1237,10 +1127,6 @@ tbody tr:hover td {
     border: 0;
 }
 
-/* ------------------------------------------------------------
-   АНИМАЦИИ
-   ------------------------------------------------------------ */
-
 .fade-up {
     animation: fadeUp 0.35s ease both;
 }
@@ -1250,16 +1136,11 @@ tbody tr:hover td {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Stagger-помощники */
 .delay-1 { animation-delay: .05s; }
 .delay-2 { animation-delay: .10s; }
 .delay-3 { animation-delay: .15s; }
 .delay-4 { animation-delay: .20s; }
 .delay-5 { animation-delay: .25s; }
-
-/* ------------------------------------------------------------
-   ПОДВАЛ
-   ------------------------------------------------------------ */
 
 .footer {
     padding: 24px 0;
@@ -1293,10 +1174,6 @@ tbody tr:hover td {
 .footer-link:hover {
     color: var(--c0);
 }
-
-/* ------------------------------------------------------------
-   АДАПТИВ
-   ------------------------------------------------------------ */
 
 @media (max-width: 1024px) {
     .page-grid {
@@ -1388,15 +1265,6 @@ tbody tr:hover td {
     }
 }
 
-/* ============================================================
-   MERIDIAN COMPONENT SYSTEM
-   Пространство имён meridian-* для всех страниц платформы
-   ============================================================ */
-
-/* ------------------------------------------------------------
-   TOPBAR
-   ------------------------------------------------------------ */
-
 .meridian-topbar {
     position: sticky;
     top: 0;
@@ -1422,7 +1290,6 @@ tbody tr:hover td {
     gap: 8px;
 }
 
-/* ---- User menu ---- */
 .meridian-user-menu {
     position: relative;
 }
@@ -1459,7 +1326,6 @@ tbody tr:hover td {
     transform: rotate(225deg) translateY(-1px);
 }
 
-/* Panel */
 .meridian-user-menu-panel {
     position: absolute;
     top: calc(100% + 10px);
@@ -1595,10 +1461,6 @@ tbody tr:hover td {
     color: var(--danger);
 }
 
-/* ------------------------------------------------------------
-   БРЕНД
-   ------------------------------------------------------------ */
-
 .meridian-brand {
     display: flex;
     align-items: center;
@@ -1607,19 +1469,20 @@ tbody tr:hover td {
 }
 
 .meridian-brand-mark {
-    width: 28px;
-    height: 28px;
-    background: var(--c0);
-    border-radius: var(--r4);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r8);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    overflow: hidden;
 }
 
-.meridian-brand-mark svg {
-    width: 14px;
-    height: 14px;
+.meridian-brand-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .meridian-brand-copy strong {
@@ -1636,10 +1499,6 @@ tbody tr:hover td {
     font-size: 12px;
     color: var(--c4);
 }
-
-/* ------------------------------------------------------------
-   NAV
-   ------------------------------------------------------------ */
 
 .meridian-nav {
     display: flex;
@@ -1666,10 +1525,6 @@ tbody tr:hover td {
     color: var(--c0);
     font-weight: 500;
 }
-
-/* ------------------------------------------------------------
-   КНОПКИ
-   ------------------------------------------------------------ */
 
 .meridian-btn {
     display: inline-flex;
@@ -1743,10 +1598,6 @@ tbody tr:hover td {
     border-radius: var(--r12);
 }
 
-/* ------------------------------------------------------------
-   SHELL И МАКЕТ
-   ------------------------------------------------------------ */
-
 .meridian-shell {
     width: var(--content-width);
     margin: 0 auto;
@@ -1757,7 +1608,6 @@ tbody tr:hover td {
     padding-top: 0;
 }
 
-/* Двухколоночная сетка (основная + боковая) */
 .meridian-page-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 340px;
@@ -1770,7 +1620,6 @@ tbody tr:hover td {
     grid-template-columns: minmax(0, 1fr) minmax(360px, 400px);
 }
 
-/* Одноколоночная: контент-страница с сайдбаром слева */
 .meridian-main {
     display: grid;
     grid-template-columns: 220px minmax(0, 1fr);
@@ -1783,10 +1632,6 @@ tbody tr:hover td {
     gap: 20px;
     align-content: start;
 }
-
-/* ------------------------------------------------------------
-   HERO (главный блок страницы)
-   ------------------------------------------------------------ */
 
 .meridian-hero {
     padding: 52px 0 40px;
@@ -1880,21 +1725,19 @@ tbody tr:hover td {
     font-weight: 400;
 }
 
-/* ------------------------------------------------------------
-   PAGE HEADER (заголовок страницы без фона)
-   ------------------------------------------------------------ */
-
 .meridian-page-header {
     padding: 40px 0 32px;
     border-bottom: 1px solid var(--c6);
 }
 
 .meridian-page-title {
-    font-family: var(--serif);
+    font-family: var(--sans);
     font-weight: 800;
     font-size: clamp(1.8rem, 4vw, 2.8rem);
-    line-height: 1.05;
-    letter-spacing: -0.03em;
+    line-height: 1.12;
+    letter-spacing: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
     color: var(--c0);
     margin-bottom: 10px;
     margin-top: 6px;
@@ -1907,10 +1750,6 @@ tbody tr:hover td {
     font-weight: 300;
     max-width: 600px;
 }
-
-/* ------------------------------------------------------------
-   САЙДБАР
-   ------------------------------------------------------------ */
 
 .meridian-sidebar {
     border-right: 1px solid var(--c6);
@@ -2071,10 +1910,6 @@ tbody tr:hover td {
     background: var(--panel-2);
 }
 
-/* ------------------------------------------------------------
-   КОНТЕНТ
-   ------------------------------------------------------------ */
-
 .meridian-content {
     padding: 24px 0 24px 24px;
     display: grid;
@@ -2112,10 +1947,6 @@ tbody tr:hover td {
     flex-shrink: 0;
 }
 
-/* ------------------------------------------------------------
-   ПАНЕЛЬ (карточка-контейнер)
-   ------------------------------------------------------------ */
-
 .meridian-panel {
     background: var(--c9);
     border: 1px solid var(--c6);
@@ -2138,10 +1969,6 @@ tbody tr:hover td {
 .meridian-panel > .meridian-section-actions {
     padding: 20px 24px;
 }
-
-/* ------------------------------------------------------------
-   СЕКЦИИ
-   ------------------------------------------------------------ */
 
 .meridian-section {
     display: grid;
@@ -2185,10 +2012,6 @@ tbody tr:hover td {
     flex-wrap: wrap;
 }
 
-/* ------------------------------------------------------------
-   БОКОВАЯ ПАНЕЛЬ (aside)
-   ------------------------------------------------------------ */
-
 .meridian-side-panel {
     display: grid;
     gap: 16px;
@@ -2199,10 +2022,6 @@ tbody tr:hover td {
     width: 100%;
     max-width: 400px;
 }
-
-/* ------------------------------------------------------------
-   ФОРМЫ
-   ------------------------------------------------------------ */
 
 .meridian-form-grid {
     display: grid;
@@ -2269,10 +2088,6 @@ tbody tr:hover td {
     color: var(--c4);
     line-height: 1.5;
 }
-
-/* ------------------------------------------------------------
-   СТАТ-КАРТОЧКИ
-   ------------------------------------------------------------ */
 
 .meridian-card-grid {
     display: grid;
@@ -2344,10 +2159,6 @@ tbody tr:hover td {
     margin-top: 4px;
 }
 
-/* ------------------------------------------------------------
-   КАРТОЧКИ ПРОЕКТОВ
-   ------------------------------------------------------------ */
-
 .meridian-project-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -2403,10 +2214,13 @@ tbody tr:hover td {
 }
 
 .meridian-project-card-title {
-    font-family: var(--serif);
+    font-family: var(--sans);
     font-size: 1rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    line-height: 1.3;
+    letter-spacing: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
     color: var(--c0);
     margin-bottom: 6px;
 }
@@ -2437,10 +2251,6 @@ tbody tr:hover td {
     gap: 8px;
     margin-top: 14px;
 }
-
-/* ------------------------------------------------------------
-   ТАБЛИЦА
-   ------------------------------------------------------------ */
 
 .meridian-table-card {
     background: var(--c9);
@@ -2521,10 +2331,6 @@ tbody tr:hover td {
     margin-top: 1px;
 }
 
-/* ------------------------------------------------------------
-   ЧИП-СТРОКА
-   ------------------------------------------------------------ */
-
 .meridian-chip-row {
     display: flex;
     flex-wrap: wrap;
@@ -2579,10 +2385,6 @@ tbody tr:hover td {
     color: var(--c4);
 }
 
-/* ------------------------------------------------------------
-   ПИЛЮЛИ СТАТУСОВ
-   ------------------------------------------------------------ */
-
 .meridian-pill {
     display: inline-flex;
     align-items: center;
@@ -2597,10 +2399,6 @@ tbody tr:hover td {
 .meridian-pill-amber  { background: var(--warning-soft); color: var(--warning); }
 .meridian-pill-red    { background: var(--danger-soft);  color: var(--danger);  }
 .meridian-pill-gray   { background: var(--c7);           color: var(--c4);      }
-
-/* ------------------------------------------------------------
-   СТАТУС С ТОЧКОЙ
-   ------------------------------------------------------------ */
 
 .meridian-status {
     display: inline-flex;
@@ -2624,10 +2422,6 @@ tbody tr:hover td {
 .meridian-status-warn::before { background: var(--warning); }
 .meridian-status-idle { color: var(--c4); }
 .meridian-status-idle::before { background: var(--c5); }
-
-/* ------------------------------------------------------------
-   КАРТОЧКИ ОТКЛИКОВ
-   ------------------------------------------------------------ */
 
 .meridian-application-card {
     padding: 16px 20px;
@@ -2679,18 +2473,10 @@ tbody tr:hover td {
     gap: 16px;
 }
 
-/* ------------------------------------------------------------
-   СПИСОК
-   ------------------------------------------------------------ */
-
 .meridian-list {
     display: grid;
     gap: 10px;
 }
-
-/* ------------------------------------------------------------
-   NOTE CARD
-   ------------------------------------------------------------ */
 
 .meridian-note-card {
     background: var(--c8);
@@ -2758,10 +2544,6 @@ tbody tr:hover td {
     text-underline-offset: 2px;
 }
 
-/* ------------------------------------------------------------
-   EMPTY STATES
-   ------------------------------------------------------------ */
-
 .meridian-empty-card {
     padding: 28px 20px;
     text-align: center;
@@ -2779,10 +2561,6 @@ tbody tr:hover td {
     text-align: center;
 }
 
-/* ------------------------------------------------------------
-   ПАГИНАЦИЯ
-   ------------------------------------------------------------ */
-
 .meridian-pager {
     display: flex;
     justify-content: flex-end;
@@ -2794,10 +2572,6 @@ tbody tr:hover td {
 .meridian-muted {
     color: var(--c4);
 }
-
-/* ------------------------------------------------------------
-   ПРОФИЛЬ HERO
-   ------------------------------------------------------------ */
 
 .meridian-profile-hero {
     display: grid;
@@ -2962,10 +2736,6 @@ tbody tr:hover td {
     pointer-events: none;
 }
 
-/* ------------------------------------------------------------
-   AUTH PAGES
-   ------------------------------------------------------------ */
-
 .meridian-auth-shell {
     min-height: 100vh;
     display: grid;
@@ -3012,10 +2782,6 @@ tbody tr:hover td {
     gap: 8px;
     margin-top: 4px;
 }
-
-/* ------------------------------------------------------------
-   АДАПТИВ
-   ------------------------------------------------------------ */
 
 @media (max-width: 1024px) {
     .meridian-page-grid {
